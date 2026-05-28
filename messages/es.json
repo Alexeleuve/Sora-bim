@@ -1,0 +1,629 @@
+{
+  "metadata": {
+    "siteName": "SORA | Technical BIM Integration",
+    "siteDescription": "Integración BIM de Sistemas Especiales para proyectos de alta complejidad. Sistemas Eléctricos, BMS, Telecomunicaciones y Seguridad Electrónica coordinados con precisión técnica.",
+    "siteUrl": "https://sorafusion.com",
+    "twitterHandle": "@soratechbim"
+  },
+  "nav": {
+    "services": "Servicios",
+    "sectors": "Sectores",
+    "soraOs": "SORA OS",
+    "blog": "Blog",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "cta": "Solicitar Diagnóstico",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "footer": {
+    "tagline": "Technical BIM Integration",
+    "description": "Integramos información crítica de Sistemas Especiales y Eléctricos para proyectos de alta complejidad.",
+    "services": "Servicios",
+    "company": "Empresa",
+    "contact": "Contacto",
+    "copyright": "© 2025 SORA | Technical BIM Integration. Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "links": {
+      "bimIntegration": "Integración BIM",
+      "bimCoordination": "Coordinación BIM",
+      "specialSystems": "Sistemas Especiales",
+      "electricalSystems": "Sistemas Eléctricos",
+      "infoManagement": "Gestión de Información",
+      "bim4d": "BIM 4D",
+      "bim5d": "BIM 5D",
+      "about": "Nosotros",
+      "caseStudies": "Casos de Éxito",
+      "blog": "Blog",
+      "contact": "Contacto"
+    },
+    "social": {
+      "linkedin": "https://www.linkedin.com/company/sora-techbim",
+      "instagram": "https://instagram.com/sora.techbim",
+      "facebook": "https://facebook.com/sora.techbim",
+      "whatsapp": "https://wa.me/525645497070",
+      "whatsappLabel": "Escríbenos por WhatsApp"
+    },
+    "location": "CDMX · León, Gto."
+  },
+  "home": {
+    "hero": {
+      "label": "Technical BIM Integration",
+      "headline": "Integración BIM de Sistemas Especiales para Proyectos de Alta Complejidad",
+      "subheadline": "Coordinamos Sistemas Eléctricos, BMS, Telecomunicaciones y Seguridad Electrónica para proyectos industriales, data centers, hospitales e infraestructura.",
+      "ctaPrimary": "Solicitar Diagnóstico",
+      "ctaSecondary": "Conocer Servicios",
+      "statement": "No modelamos. Integramos.",
+      "scrollLabel": "Descubrir"
+    },
+    "about": {
+      "label": "01 — Quiénes Somos",
+      "headline": "Integramos información crítica para que los proyectos se construyan.",
+      "body": "No somos un despacho de modelado BIM. Somos el sistema que conecta Sistemas Eléctricos, BMS, Telecomunicaciones, Seguridad Electrónica y Control Industrial en un modelo federado coordinado, trazable y construible.",
+      "stats": [
+        { "value": 15, "suffix": "+", "label": "Proyectos coordinados" },
+        { "value": 6, "suffix": "+", "label": "Sectores atendidos" },
+        { "value": 7, "suffix": "+", "label": "Años de experiencia" }
+      ],
+      "cta": "Conocer Nuestra Metodología"
+    },
+    "services": {
+      "label": "02 — Servicios",
+      "headline": "Nuestras Capacidades Técnicas de Integración",
+      "subheadline": "Cada servicio es una capa del sistema de integración que SORA construye para tu proyecto: desde Sistemas Eléctricos hasta BMS, Telecomunicaciones y Seguridad.",
+      "cta": "Ver Todos los Servicios"
+    },
+    "methodology": {
+      "label": "03 — Metodología",
+      "headline": "El proceso que hace construible la complejidad.",
+      "quote": "La coordinación no ocurre por accidente. Ocurre por sistema.",
+      "quoteAuthor": "SORA | Technical BIM Integration",
+      "steps": [
+        {
+          "number": "01",
+          "title": "Diagnóstico y AIR",
+          "description": "Analizamos el Asset Information Requirements y el Employer Information Requirements del proyecto para establecer la base de gobernanza."
+        },
+        {
+          "number": "02",
+          "title": "BEP + TIDP",
+          "description": "Diseñamos el BIM Execution Plan y el Task Information Delivery Plan alineados a los objetivos del cliente."
+        },
+        {
+          "number": "03",
+          "title": "Modelado Coordinado",
+          "description": "Integramos geometría e información crítica — Eléctrico, BMS, Telecomunicaciones, Seguridad — bajo el Entorno Común de Datos (CDE) con trazabilidad total."
+        },
+        {
+          "number": "04",
+          "title": "Clash Detection + BCF",
+          "description": "Detección, documentación y resolución de interferencias entre sistemas mediante flujos BCF estructurados."
+        },
+        {
+          "number": "05",
+          "title": "Entrega y COBie",
+          "description": "Modelo construible, activo digital y entrega estructurada de información para operación y mantenimiento."
+        }
+      ]
+    },
+    "soraOs": {
+      "label": "04 — Sistema Operativo",
+      "title": "SORA OS",
+      "headline": "El sistema operativo de la integración técnica.",
+      "body": "La integración BIM técnica no ocurre por accidente. Detrás de cada proyecto coordinado, trazable y construible existe un sistema que conecta información, procesos, personas y tecnología.",
+      "cta": "Conocer SORA OS",
+      "pillars": [
+        { "icon": "ShieldCheck", "title": "Gobernanza de Información", "description": "Control total sobre la producción, distribución y revisión de información." },
+        { "icon": "FolderOpen", "title": "CDE Management", "description": "Gestión del Entorno Común de Datos para colaboración estructurada." },
+        { "icon": "BadgeCheck", "title": "ISO 19650 Compliance", "description": "Procesos alineados al estándar internacional de gestión de información BIM." },
+        { "icon": "Network", "title": "Integración Digital", "description": "Conectividad entre plataformas, disciplinas y equipos de trabajo." },
+        { "icon": "Workflow", "title": "Automatización de Flujos", "description": "Procesos automatizados para reducir errores y acelerar entregas." },
+        { "icon": "Route", "title": "Trazabilidad Total", "description": "Cada decisión, cambio y entregable documentado y rastreable." }
+      ]
+    },
+    "bimTech": {
+      "label": "05 — Tecnología BIM",
+      "headline": "Herramientas de clase mundial. Procesos de precisión técnica.",
+      "body": "Utilizamos las plataformas más avanzadas del mercado: no como fin, sino como medio para la integración técnica de Sistemas Eléctricos, BMS, Telecomunicaciones y Seguridad Electrónica.",
+      "tools": [
+        "Autodesk Revit",
+        "Autodesk Navisworks",
+        "Autodesk BIM 360",
+        "Autodesk ACC",
+        "Solibri Model Checker",
+        "Trimble Connect",
+        "BIMcollab"
+      ],
+      "cta": "Conocer Servicios"
+    },
+    "construction": {
+      "label": "06 — Construcción",
+      "headline": "La información que llega al campo debe ser construible.",
+      "body": "Integramos información eléctrica, mecánica y de sistemas especiales para reducir interferencias, retrabajos y costos de indefinición antes de que ocurran en obra.",
+      "stats": [
+        { "value": 85, "suffix": "%", "label": "Interferencias detectadas antes de obra" },
+        { "value": 40, "suffix": "%", "label": "Reducción de retrabajos" },
+        { "value": 60, "suffix": "%", "label": "Solicitudes de cambio evitadas" }
+      ]
+    },
+    "innovation": {
+      "label": "07 — Innovación",
+      "headline": "Donde los datos se convierten en decisiones.",
+      "body": "La innovación en SORA no comienza en el software. Comienza en cómo estructuramos la información eléctrica, de BMS, telecomunicaciones y seguridad para que sea útil, trazable y accionable en cualquier fase del proyecto.",
+      "flow": [
+        "Información",
+        "Coordinación",
+        "Integración",
+        "Constructibilidad"
+      ],
+      "cta": "Conocer SORA OS"
+    },
+    "sectors": {
+      "label": "08 — Sectores",
+      "headline": "Proyectos de alta complejidad en los sectores que más nos necesitan.",
+      "cta": "Ver Todos los Sectores"
+    },
+    "coverage": {
+      "label": "09 — Cobertura",
+      "headline": "Operación Nacional. Ejecución de Precisión.",
+      "subheadline": "Operación Nacional · CDMX · León · Bajío",
+      "locations": [
+        {
+          "city": "Ciudad de México",
+          "role": "Hub Central",
+          "description": "Proyectos corporativos, institucionales e infraestructura crítica con sistemas eléctricos y especiales de alta complejidad."
+        },
+        {
+          "city": "León, Guanajuato",
+          "role": "Sede Operativa",
+          "description": "Operación directa en el Bajío con capacidad técnica completa para proyectos industriales y comerciales."
+        },
+        {
+          "city": "Región Bajío",
+          "role": "Alianza Estratégica",
+          "description": "Cobertura ampliada en colaboración con Proyecta BIM — empresa independiente y socio estratégico regional."
+        },
+        {
+          "city": "Proyectos Nacionales",
+          "role": "Alcance Nacional",
+          "description": "Integración BIM y gestión de información para proyectos en cualquier punto del país."
+        }
+      ],
+      "alliance": {
+        "title": "Red de Colaboración Técnica",
+        "body": "SORA colabora estratégicamente con Proyecta BIM en la región Bajío. Dos empresas independientes que comparten estándares técnicos y visión de precisión. Una alianza que amplía la capacidad operativa regional sin comprometer la especialización de cada organización."
+      }
+    },
+    "cta": {
+      "headline": "Tu próximo proyecto merece información coordinada desde el inicio.",
+      "body": "La diferencia entre un proyecto caótico y uno construible comienza antes de obra. Comienza en cómo se gestiona la información.",
+      "primary": "Agendar Sesión Técnica",
+      "secondary": "Ver Servicios Completos"
+    }
+  },
+  "services": {
+    "hero": {
+      "label": "Servicios",
+      "headline": "Nuestras capacidades técnicas de integración BIM.",
+      "subheadline": "Cada servicio es una capa del sistema de integración que construimos para proyectos de alta complejidad: Sistemas Eléctricos, BMS, Telecomunicaciones, Seguridad y más."
+    },
+    "items": [
+      {
+        "slug": "integracion-bim",
+        "icon": "GitMerge",
+        "title": "Integración BIM",
+        "shortDescription": "Conectamos Sistemas Eléctricos, BMS, Telecomunicaciones y Seguridad en un modelo federado coordinado y construible.",
+        "description": "La integración BIM va más allá del modelado. Implica la articulación de información técnica de Sistemas Eléctricos (Media Tensión, Baja Tensión, Fuerza, Alumbrado, Tierras, Pararrayos), BMS, Telecomunicaciones y Seguridad Electrónica en un entorno controlado, trazable y alineado a los requerimientos del cliente.",
+        "benefits": [
+          "Modelo federado con información eléctrica, mecánica y de sistemas especiales consistente y trazable",
+          "Reducción de interferencias entre sistemas eléctricos, tuberías y estructura antes de construcción",
+          "Alineación entre diseño eléctrico, ingeniería de sistemas y construcción",
+          "Entregables verificables bajo estándares ISO 19650"
+        ],
+        "useCases": [
+          { "sector": "Industrial", "description": "Integración de sistemas eléctricos de media y baja tensión, BMS y automatización en plantas." },
+          { "sector": "Data Centers", "description": "Coordinación de sistemas de fuerza ininterrumpida, distribución eléctrica y sistemas críticos." },
+          { "sector": "Hospitales", "description": "Integración de sistemas médicos, eléctricos especiales, gases y seguridad." }
+        ],
+        "standards": ["ISO 19650", "IFC", "BCF", "COBie"],
+        "cta": "Solicitar Diagnóstico"
+      },
+      {
+        "slug": "coordinacion-bim",
+        "icon": "Layers",
+        "title": "Coordinación BIM",
+        "shortDescription": "Detección y resolución de interferencias — eléctricas, mecánicas y estructurales — antes de que lleguen a obra.",
+        "description": "La coordinación BIM es el proceso sistemático de identificación, documentación y resolución de conflictos entre disciplinas antes de la construcción. SORA implementa flujos de coordinación estructurados bajo BCF y CDE, con especial atención a las interferencias entre sistemas eléctricos, mecánicos y estructurales.",
+        "benefits": [
+          "Detección temprana de interferencias entre sistemas eléctricos, mecánicos y estructurales",
+          "Flujos BCF documentados y trazables por disciplina",
+          "Reducción de RFIs y solicitudes de cambio en campo",
+          "Reuniones de coordinación con agenda técnica estructurada"
+        ],
+        "useCases": [
+          { "sector": "Infraestructura", "description": "Coordinación de instalaciones eléctricas subterráneas y sistemas estructurales." },
+          { "sector": "Comercial", "description": "Coordinación arquitectónica, eléctrica, estructural e instalaciones especiales." },
+          { "sector": "Industrial", "description": "Coordinación de sistemas eléctricos, piping, estructura y automatización." }
+        ],
+        "standards": ["BCF", "CDE", "IFC", "ISO 19650"],
+        "cta": "Solicitar Diagnóstico"
+      },
+      {
+        "slug": "sistemas-especiales",
+        "icon": "Cpu",
+        "title": "Sistemas Especiales",
+        "shortDescription": "BIM para BMS, Telecomunicaciones, Seguridad Electrónica, Control Industrial y Automatización.",
+        "description": "Los sistemas especiales son frecuentemente el talón de Aquiles de la coordinación BIM. SORA se especializa en integrar BMS, Telecomunicaciones, CCTV, Control de Acceso, Sistemas Contra Incendio, Control Industrial y Automatización en el modelo federado, coordinados con los sistemas eléctricos y la estructura.",
+        "benefits": [
+          "Modelado preciso de BMS, Telecomunicaciones, Seguridad y Control Industrial",
+          "Coordinación con sistemas eléctricos, estructura, arquitectura y MEP",
+          "Documentación técnica alineada a especificaciones del fabricante",
+          "Entregables para instalación, comisionamiento y mantenimiento"
+        ],
+        "useCases": [
+          { "sector": "Data Centers", "description": "BMS, monitoreo ambiental, sistemas de enfriamiento, UPS y distribución eléctrica." },
+          { "sector": "Hospitales", "description": "Sistemas de llamada de enfermera, comunicación, seguridad y redes clínicas." },
+          { "sector": "Industrial", "description": "SCADA, PLC, Control Industrial, automatización y sistemas de seguridad." }
+        ],
+        "standards": ["IEC 62443", "ISO 19650", "IFC"],
+        "cta": "Solicitar Diagnóstico"
+      },
+      {
+        "slug": "sistemas-electricos",
+        "icon": "Zap",
+        "title": "Sistemas Eléctricos BIM",
+        "shortDescription": "Integración BIM de Media Tensión, Baja Tensión, Fuerza, Alumbrado, Tierras y Pararrayos.",
+        "description": "Los sistemas eléctricos son la columna vertebral de cualquier proyecto de alta complejidad. SORA integra en BIM todos los niveles del sistema eléctrico: desde subestaciones de Media Tensión hasta distribución de Baja Tensión, circuitos de Fuerza, Alumbrado interior y exterior, sistemas de Tierras y protección contra rayos (Pararrayos), coordinados con el resto de disciplinas del proyecto.",
+        "benefits": [
+          "Modelado BIM de subestaciones, tableros y trayectorias eléctricas de Media y Baja Tensión",
+          "Coordinación entre sistemas de Fuerza, Alumbrado, Tierras y Pararrayos con estructura y arquitectura",
+          "Detección de interferencias eléctricas antes de instalación en campo",
+          "Documentación técnica completa para cumplimiento normativo y mantenimiento"
+        ],
+        "useCases": [
+          { "sector": "Industrial", "description": "Subestaciones de Media Tensión, distribución eléctrica de planta, alumbrado industrial y sistemas de tierra." },
+          { "sector": "Data Centers", "description": "Distribución eléctrica redundante, PDUs, sistemas de tierra crítica y pararrayos." },
+          { "sector": "Infraestructura", "description": "Alumbrado público, redes de distribución subterránea y sistemas de protección." }
+        ],
+        "standards": ["NOM-001-SEDE", "ISO 19650", "IFC", "IEC 60364"],
+        "cta": "Solicitar Diagnóstico"
+      },
+      {
+        "slug": "gestion-informacion",
+        "icon": "Database",
+        "title": "Gestión de Información",
+        "shortDescription": "Gobierno de información desde el EIR hasta la entrega del activo digital.",
+        "description": "La gestión de información BIM bajo ISO 19650 requiere procesos, responsables y herramientas definidos desde el inicio. SORA implementa la cadena completa: AIR → OIR → PIR → EIR → BEP → TIDP → MIDP → IFC.",
+        "benefits": [
+          "Marco de gobernanza de información documentado",
+          "Estructura de CDE configurada y operativa",
+          "Nomenclatura y clasificación bajo norma",
+          "Trazabilidad de revisiones y aprobaciones"
+        ],
+        "useCases": [
+          { "sector": "Infraestructura pública", "description": "Cumplimiento de requerimientos de información institucionales." },
+          { "sector": "Industrial", "description": "Gestión de activos digitales para operación y mantenimiento." },
+          { "sector": "Data Centers", "description": "Documentación técnica certificable para operadores." }
+        ],
+        "standards": ["ISO 19650-1", "ISO 19650-2", "ISO 19650-3", "CDE"],
+        "cta": "Solicitar Diagnóstico"
+      },
+      {
+        "slug": "bim-4d",
+        "icon": "Clock",
+        "title": "BIM 4D",
+        "shortDescription": "Planificación de obra vinculada al modelo BIM. Simulación de la construcción.",
+        "description": "BIM 4D integra la dimensión temporal al modelo tridimensional para simular el proceso constructivo, identificar conflictos de secuencia y optimizar la planificación de obra.",
+        "benefits": [
+          "Simulación visual del proceso constructivo",
+          "Identificación de conflictos de secuencia antes de obra",
+          "Optimización de frentes de trabajo y recursos",
+          "Comunicación efectiva del plan de construcción"
+        ],
+        "useCases": [
+          { "sector": "Industrial", "description": "Planificación de paros de planta con impacto mínimo en producción." },
+          { "sector": "Infraestructura", "description": "Secuencias constructivas en proyectos con tráfico activo." },
+          { "sector": "Data Centers", "description": "Construcción en fases con continuidad operativa." }
+        ],
+        "standards": ["ISO 19650", "WBS", "Primavera P6", "MS Project"],
+        "cta": "Solicitar Diagnóstico"
+      },
+      {
+        "slug": "bim-5d",
+        "icon": "DollarSign",
+        "title": "BIM 5D",
+        "shortDescription": "Control de costos integrado al modelo BIM. Cubicación y presupuesto automatizados.",
+        "description": "BIM 5D vincula el modelo con la información de costos para generar cubicaciones automatizadas, presupuestos confiables y control de costo en tiempo real durante la construcción.",
+        "benefits": [
+          "Cubicación automatizada desde el modelo",
+          "Presupuestos con mayor precisión y velocidad",
+          "Control de costo integrado al avance real",
+          "Reducción de incertidumbre en estimaciones"
+        ],
+        "useCases": [
+          { "sector": "Comercial", "description": "Estimaciones tempranas para decisiones de inversión." },
+          { "sector": "Hospitales", "description": "Control de costo en proyectos con alta variabilidad de sistemas." },
+          { "sector": "Industrial", "description": "Presupuestación de instalaciones eléctricas y sistemas especiales." }
+        ],
+        "standards": ["ISO 19650", "NMX", "ASTM E2168"],
+        "cta": "Solicitar Diagnóstico"
+      }
+    ]
+  },
+  "sectors": {
+    "hero": {
+      "label": "Sectores",
+      "headline": "Experiencia técnica en los sectores que exigen más.",
+      "subheadline": "Cada sector tiene sus propios sistemas eléctricos, especiales y retos de coordinación. SORA los conoce."
+    },
+    "items": [
+      {
+        "slug": "industrial",
+        "icon": "Factory",
+        "title": "Industrial",
+        "tagline": "Los sistemas más críticos exigen la integración más precisa.",
+        "description": "Las plantas industriales concentran la mayor densidad de sistemas por metro cuadrado: Media y Baja Tensión, BMS, Control Industrial, Telecomunicaciones y Seguridad. Todos deben coexistir en un espacio coordinado sin interferencias.",
+        "systems": ["Media Tensión", "Baja Tensión", "BMS", "SCADA", "PLC", "Control Industrial", "Seguridad Industrial", "Telecomunicaciones", "Sistemas Contra Incendio"],
+        "services": ["integracion-bim", "sistemas-electricos", "coordinacion-bim", "sistemas-especiales", "bim-4d"]
+      },
+      {
+        "slug": "data-centers",
+        "icon": "Server",
+        "title": "Data Centers",
+        "tagline": "Tolerancia cero a errores. Integración sin margen de falla.",
+        "description": "Los data centers demandan el nivel más alto de coordinación eléctrica y de sistemas. Distribución de Fuerza redundante, Tierras críticas, BMS, monitoreo ambiental y sistemas de seguridad deben integrarse sin margen de error.",
+        "systems": ["Media Tensión", "Distribución de Fuerza", "UPS", "Tierras Críticas", "CRAC / CRAH", "BMS / DCIM", "FM-200", "CCTV", "Control de Acceso", "Telecomunicaciones"],
+        "services": ["integracion-bim", "sistemas-electricos", "sistemas-especiales", "gestion-informacion", "bim-4d"]
+      },
+      {
+        "slug": "hospitales",
+        "icon": "Building2",
+        "title": "Hospitales",
+        "tagline": "Sistemas médicos, eléctricos especiales y seguridad integrados sin interferencias.",
+        "description": "Los proyectos hospitalarios combinan instalaciones eléctricas de misión crítica (Fuerza Normal, Fuerza de Emergencia, UPS médica) con sistemas especiales como gases medicinales, llamada de enfermera, imagenología y seguridad.",
+        "systems": ["Fuerza Normal / Emergencia", "UPS Médica", "Alumbrado Especial", "Gases Medicinales", "Llamada de Enfermera", "HVAC Sala Limpia", "Seguridad Electrónica", "Redes Clínicas"],
+        "services": ["integracion-bim", "sistemas-electricos", "coordinacion-bim", "sistemas-especiales", "gestion-informacion"]
+      },
+      {
+        "slug": "comercial",
+        "icon": "Building",
+        "title": "Comercial",
+        "tagline": "Coordinación de alta densidad en proyectos de uso mixto y corporativos.",
+        "description": "Los proyectos comerciales y corporativos combinan múltiples disciplinas en cronogramas ajustados. SORA coordina sistemas eléctricos de Alumbrado, Fuerza, BMS y Seguridad con arquitectura, estructura e instalaciones hidráulicas.",
+        "systems": ["Alumbrado Interior / Exterior", "Fuerza Regulada", "HVAC Comercial", "BMS Edificio", "Telecomunicaciones", "Seguridad Electrónica", "Sistemas Audiovisuales"],
+        "services": ["coordinacion-bim", "sistemas-electricos", "integracion-bim", "sistemas-especiales", "bim-5d", "bim-4d"]
+      },
+      {
+        "slug": "infraestructura",
+        "icon": "Landmark",
+        "title": "Infraestructura",
+        "tagline": "Coordinación subterránea, lineal y de alta complejidad técnica.",
+        "description": "La infraestructura pública y privada presenta retos únicos: redes eléctricas subterráneas, Alumbrado Público, Tierras y Pararrayos, telecomunicaciones y sistemas de control de tráfico — todo coordinado bajo estándares institucionales.",
+        "systems": ["Alumbrado Público", "Redes Eléctricas Subterráneas", "Tierras y Pararrayos", "Telecomunicaciones", "Sistemas de Drenaje", "Control de Tráfico", "Señalización"],
+        "services": ["integracion-bim", "sistemas-electricos", "coordinacion-bim", "gestion-informacion", "bim-4d"]
+      }
+    ]
+  },
+  "soraOs": {
+    "hero": {
+      "label": "SORA OS",
+      "headline": "El sistema operativo de la integración técnica BIM.",
+      "subheadline": "Framework propietario que conecta información, procesos, personas y tecnología para hacer construible lo que de otro modo sería caos."
+    },
+    "principle": {
+      "headline": "La integración técnica no ocurre por accidente.",
+      "body": "Cada proyecto coordinado, trazable y construible es el resultado de un sistema que conecta información, procesos y personas con intención, disciplina y método.",
+      "statement": "Ese sistema es SORA OS."
+    },
+    "pillars": [
+      {
+        "icon": "ShieldCheck",
+        "title": "Gobernanza de Información",
+        "description": "Control total sobre la producción, distribución, revisión y aprobación de información a lo largo del ciclo de vida del proyecto."
+      },
+      {
+        "icon": "FolderOpen",
+        "title": "CDE Management",
+        "description": "Gestión del Entorno Común de Datos para colaboración estructurada entre todos los participantes del proyecto."
+      },
+      {
+        "icon": "BadgeCheck",
+        "title": "ISO 19650 Compliance",
+        "description": "Procesos, documentos y flujos de trabajo alineados al estándar internacional de gestión de información BIM."
+      },
+      {
+        "icon": "Network",
+        "title": "Integración Digital",
+        "description": "Conectividad entre plataformas, disciplinas y equipos de trabajo en un entorno unificado de información."
+      },
+      {
+        "icon": "Workflow",
+        "title": "Automatización de Flujos",
+        "description": "Procesos automatizados que reducen errores humanos, aceleran entregas y aseguran consistencia de información."
+      },
+      {
+        "icon": "Route",
+        "title": "Trazabilidad Total",
+        "description": "Cada decisión, cambio y entregable documentado, fechado y rastreable durante todo el ciclo de vida del activo."
+      }
+    ],
+    "flow": {
+      "headline": "Un sistema que conecta todo.",
+      "items": ["Información", "Coordinación", "Integración", "Constructibilidad"]
+    },
+    "standards": {
+      "headline": "Inspirado en los estándares más rigurosos.",
+      "body": "SORA OS está fundamentado en los marcos de referencia internacionales para la gestión de información en construcción.",
+      "items": ["ISO 19650-1", "ISO 19650-2", "ISO 19650-3", "CDE", "IFC", "BCF", "COBie", "IDD"]
+    },
+    "cta": {
+      "headline": "¿Quieres saber cómo SORA OS transformaría la gestión de información de tu próximo proyecto?",
+      "primary": "Agendar Sesión Técnica",
+      "secondary": "Conocer Servicios"
+    }
+  },
+  "about": {
+    "hero": {
+      "label": "Nosotros",
+      "headline": "Somos SORA.",
+      "subheadline": "Integramos información técnica de Sistemas Eléctricos y Especiales para proyectos que no admiten errores."
+    },
+    "story": {
+      "label": "Nuestra Historia",
+      "headline": "Nació de la industria. Se construyó para la industria.",
+      "body": "SORA surge de la observación directa de un problema recurrente en proyectos de alta complejidad: los Sistemas Eléctricos, BMS, Telecomunicaciones y Seguridad Electrónica se diseñan por separado, se modelan por separado y frecuentemente se instalan sin coordinación entre sí ni con el resto del proyecto.\n\nFundamos SORA para resolver ese problema de raíz: como integradores técnicos especializados en Sistemas Eléctricos y Sistemas Especiales bajo estándares BIM internacionales."
+    },
+    "values": {
+      "label": "Nuestros Valores",
+      "headline": "Los principios que gobiernan cada proyecto.",
+      "items": [
+        {
+          "icon": "Target",
+          "title": "Precisión Técnica",
+          "description": "La información incorrecta tiene consecuencias reales. Cada entregable de SORA pasa por procesos de verificación sistemáticos."
+        },
+        {
+          "icon": "GitBranch",
+          "title": "Trazabilidad Total",
+          "description": "Cada decisión, cambio y entregable es documentado, fechado y rastreable. Sin zonas grises de información."
+        },
+        {
+          "icon": "Link",
+          "title": "Integración",
+          "description": "Conectamos lo que otros dejan desconectado: Sistemas Eléctricos, BMS, Telecomunicaciones, Seguridad y Estructura."
+        },
+        {
+          "icon": "Award",
+          "title": "Compromiso Técnico",
+          "description": "Asumimos la responsabilidad completa de la coordinación técnica del proyecto desde el inicio hasta la entrega."
+        }
+      ]
+    },
+    "certifications": {
+      "label": "Estándares y Certificaciones",
+      "headline": "Trabajamos bajo los estándares más exigentes.",
+      "items": ["ISO 19650", "Autodesk Certified", "BIM Manager", "Navisworks Certified"]
+    },
+    "alliance": {
+      "label": "Red de Colaboración Técnica",
+      "headline": "Empresas independientes. Colaboración estratégica.",
+      "body": "SORA colabora estratégicamente con Proyecta BIM en la región Bajío. Son dos empresas independientes con identidad propia que comparten estándares técnicos y visión de precisión.\n\nEsta colaboración nos permite ampliar la capacidad operativa en proyectos regionales sin comprometer la especialización técnica que define a cada organización."
+    },
+    "cta": {
+      "headline": "¿Listo para trabajar con un socio técnico que entiende tu proyecto?",
+      "primary": "Agendar Sesión Técnica",
+      "secondary": "Ver Servicios"
+    }
+  },
+  "contact": {
+    "hero": {
+      "label": "Contacto",
+      "headline": "Hablemos de tu proyecto.",
+      "subheadline": "Iniciamos con un diagnóstico técnico gratuito."
+    },
+    "diagnosis": {
+      "headline": "¿Qué incluye el diagnóstico?",
+      "items": [
+        "Revisión de requerimientos de información del proyecto",
+        "Identificación de brechas en coordinación eléctrica y de sistemas especiales",
+        "Propuesta inicial de integración técnica",
+        "Sin costo. Sin compromiso."
+      ]
+    },
+    "form": {
+      "name": "Nombre completo",
+      "company": "Empresa",
+      "email": "Correo electrónico",
+      "projectType": "Tipo de proyecto",
+      "projectTypeOptions": [
+        { "value": "", "label": "Selecciona un sector" },
+        { "value": "industrial", "label": "Industrial" },
+        { "value": "data-center", "label": "Data Center" },
+        { "value": "hospital", "label": "Hospital" },
+        { "value": "comercial", "label": "Comercial" },
+        { "value": "infraestructura", "label": "Infraestructura" },
+        { "value": "otro", "label": "Otro" }
+      ],
+      "message": "Cuéntanos sobre tu proyecto",
+      "messagePlaceholder": "Describe brevemente tu proyecto, sistemas involucrados (eléctrico, BMS, telecomunicaciones, seguridad) y principales retos de coordinación...",
+      "submit": "Solicitar Diagnóstico",
+      "submitting": "Enviando...",
+      "success": "Tu mensaje fue enviado. Nos pondremos en contacto en menos de 24 horas.",
+      "error": "Ocurrió un error. Por favor intenta nuevamente.",
+      "privacy": "Tu información es confidencial y no será compartida con terceros."
+    },
+    "info": {
+      "email": "info@sorafusion.com",
+      "phone": "+52 56 4549 7070",
+      "linkedin": "SORA Technical BIM Integration",
+      "linkedinUrl": "https://www.linkedin.com/company/sora-techbim",
+      "instagramUrl": "https://instagram.com/sora.techbim",
+      "facebookUrl": "https://facebook.com/sora.techbim",
+      "whatsappUrl": "https://wa.me/525645497070",
+      "whatsappLabel": "Escríbenos por WhatsApp",
+      "location": "Ciudad de México · León, Guanajuato"
+    }
+  },
+  "blog": {
+    "hero": {
+      "label": "Blog",
+      "headline": "Conocimiento técnico para la industria.",
+      "subheadline": "Artículos sobre BIM, Sistemas Eléctricos, Sistemas Especiales, ISO 19650 y transformación digital en construcción."
+    },
+    "categories": {
+      "all": "Todos",
+      "bim": "BIM",
+      "iso-19650": "ISO 19650",
+      "cde": "CDE",
+      "sistemas-especiales": "Sistemas Especiales",
+      "data-centers": "Data Centers",
+      "hospitales": "Hospitales",
+      "industria": "Industria",
+      "coordinacion-bim": "Coordinación BIM",
+      "ia-aplicada-bim": "IA Aplicada a BIM",
+      "transformacion-digital": "Transformación Digital"
+    },
+    "readMore": "Leer artículo",
+    "readTime": "min de lectura",
+    "publishedOn": "Publicado el",
+    "backToBlog": "Volver al Blog",
+    "relatedPosts": "Artículos relacionados",
+    "noPostsFound": "No se encontraron artículos en esta categoría.",
+    "newsletter": {
+      "headline": "Recibe conocimiento técnico BIM directamente.",
+      "body": "Artículos sobre Sistemas Eléctricos, BMS, estándares ISO y tecnología para profesionales de la construcción.",
+      "placeholder": "Tu correo electrónico",
+      "cta": "Suscribirse",
+      "privacy": "Sin spam. Solo contenido técnico de valor."
+    }
+  },
+  "caseStudies": {
+    "hero": {
+      "label": "Casos de Éxito",
+      "headline": "Proyectos que demuestran lo que significa integrar.",
+      "subheadline": "Casos reales de integración BIM de Sistemas Eléctricos y Especiales en proyectos de alta complejidad."
+    },
+    "comingSoon": {
+      "headline": "Próximamente.",
+      "body": "Estamos documentando nuestros casos de éxito con el mismo rigor técnico con el que ejecutamos cada proyecto.",
+      "cta": "Mientras tanto, hablemos de tu proyecto"
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "notFound": "Página no encontrada",
+    "backHome": "Volver al inicio",
+    "learnMore": "Conocer más",
+    "seeAll": "Ver todos",
+    "downloadPdf": "Descargar PDF",
+    "schedule": "Agendar",
+    "send": "Enviar",
+    "required": "Campo requerido",
+    "invalidEmail": "Correo electrónico inválido",
+    "breadcrumb": {
+      "home": "Inicio"
+    }
+  }
+}

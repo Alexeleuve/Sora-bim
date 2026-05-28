@@ -1,0 +1,28 @@
+{
+  "name": "SORA | Technical BIM Integration",
+  "short_name": "SORA BIM",
+  "description": "Integración BIM de Sistemas Especiales para proyectos de alta complejidad.",
+  "start_url": "/es/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#033C77",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

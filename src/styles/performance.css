@@ -1,0 +1,148 @@
+/* ─── CRITICAL CSS — Performance additions ─────────────────────────
+   This file extends globals.css with performance-critical rules.
+   Import order: globals.css THEN this file
+   ─────────────────────────────────────────────────────────────────── */
+
+/* ── FONT DISPLAY OPTIMIZATION ─────────────────────────────────────
+   next/font handles font-display: swap automatically.
+   These rules ensure no FOIT (Flash of Invisible Text) occurs.
+*/
+@font-face {
+  font-display: swap;
+}
+
+/* ── WILL-CHANGE — Only for actively animating elements ────────────
+   GPU layer promotion for elements with frequent transforms.
+   CAUTION: Don't apply globally — only to specific animated elements.
+*/
+.will-animate {
+  will-change: transform, opacity;
+}
+
+/* Reset will-change after animation completes */
+.animation-complete {
+  will-change: auto;
+}
+
+/* ── CONTAIN — Layout containment for performance ──────────────────
+   Signals to the browser that changes inside won't affect outside.
+   Improves paint performance for cards, list items, etc.
+*/
+.contain-layout {
+  contain: layout;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+/* ── SMOOTH SCROLL — Section anchors ────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ── CONTENT VISIBILITY — Defer off-screen rendering ───────────────
+   Tells the browser it can skip rendering until near viewport.
+   Apply to heavy below-fold sections.
+   NOTE: Requires known height to prevent layout shift.
+*/
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* ── IMAGE PERFORMANCE ──────────────────────────────────────────── */
+img {
+  /* Prevent layout shift while image loads */
+  height: auto;
+  /* Enable hardware acceleration for transforms on images */
+  transform: translateZ(0);
+}
+
+/* Hero image — eager load, no lazy */
+.hero-image {
+  loading: eager;
+  decoding: sync;
+}
+
+/* ── BACKDROP FILTER PERFORMANCE ───────────────────────────────── */
+/* Promote header to its own GPU layer for smooth blur effect */
+.header-blur {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translateZ(0); /* Force GPU layer */
+}
+
+/* ── FOCUS OUTLINE — Keyboard navigation ────────────────────────── */
+/* Already in globals.css — this ensures it's visible across all browsers */
+:focus-visible {
+  outline: 3px solid #38BDF8;
+  outline-offset: 3px;
+}
+
+/* ── PRINT STYLES ───────────────────────────────────────────────── */
+@media print {
+  /* Hide nav, animations, CTAs */
+  header, footer, .floating-cta, [data-no-print] {
+    display: none !important;
+  }
+
+  /* Ensure readable text */
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+
+  /* Page breaks */
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  p, li {
+    page-break-inside: avoid;
+  }
+
+  /* Show full URLs for links */
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 10pt;
+    color: #666;
+  }
+}
+
+/* ── REDUCED MOTION — Comprehensive override ────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  /* Override ALL transitions and animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration:       0.01ms !important;
+    transition-delay:          0ms !important;
+    scroll-behavior:           auto !important;
+  }
+
+  /* Keep opacity transitions (these are OK for reduced motion) */
+  /* But disable transforms entirely */
+  .motion-reduce-opacity {
+    transition: opacity 200ms ease !important;
+  }
+}
+
+/* ── HIGH CONTRAST ──────────────────────────────────────────────── */
+@media (forced-colors: active) {
+  /* Ensure borders are visible in high contrast mode */
+  .card-base,
+  .btn,
+  .badge {
+    border: 2px solid ButtonText;
+  }
+}

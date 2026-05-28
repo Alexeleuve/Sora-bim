@@ -1,0 +1,97 @@
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { routing } from '@/i18n/routing'
+import { generateMetadata as genMeta, getServicesMetadata } from '@/lib/seo'
+import { getServiceSchema, getBreadcrumbSchema } from '@/lib/schema'
+import type { Locale, ServiceItem } from '@/types'
+
+import SiteLayout from '@/components/layout/SiteLayout'
+import SchemaOrg from '@/components/shared/SchemaOrg'
+import CTASection from '@/components/shared/CTASection'
+import BreadcrumbNav from '@/components/shared/BreadcrumbNav'
+import ServicesHero from '@/components/sections/services/ServicesHero'
+import ServicesGrid from '@/components/sections/services/ServicesGrid'
+
+type Props = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  const seoData = getServicesMetadata(locale as Locale)
+  return genMeta(seoData, locale as Locale)
+}
+
+export default async function ServicesPage({ params }: Props) {
+  const { locale } = await params
+  if (!routing.locales.includes(locale as Locale)) notFound()
+
+  const t = await getTranslations('services')
+  const tCommon = await getTranslations('common')
+  const isEs = locale === 'es'
+  const basePath = isEs ? `/${locale}/servicios` : `/${locale}/services`
+  const contactHref = isEs ? `/${locale}/contacto` : `/${locale}/contact`
+
+  const services = t.raw('items') as ServiceItem[]
+  const heroData = {
+    label:       t('hero.label'),
+    headline:    t('hero.headline'),
+    subheadline: t('hero.subheadline'),
+  }
+
+  // Schema
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: tCommon('breadcrumb.home'), url: `/${locale}/` },
+    { name: heroData.label, url: basePath },
+  ])
+
+  const servicesSchemas = services.map((s) =>
+    getServiceSchema(s.title, s.shortDescription, 'BIM Integration Service')
+  )
+
+  return (
+    <>
+      <SchemaOrg schema={[breadcrumbSchema, ...servicesSchemas]} />
+      <SiteLayout>
+
+        {/* Hero */}
+        <ServicesHero {...heroData} />
+
+        {/* Breadcrumb */}
+        <div className="bg-neutral-50 border-b border-neutral-200">
+          <div className="container-section py-3">
+            <BreadcrumbNav
+              items={[
+                { label: tCommon('breadcrumb.home'), href: `/${locale}/` },
+                { label: heroData.label },
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* Services Grid */}
+        <ServicesGrid
+          services={services}
+          basePath={basePath}
+          allLabel={isEs ? 'Todos' : 'All'}
+        />
+
+        {/* CTA */}
+        <CTASection
+          headline={isEs
+            ? 'No estás seguro de qué servicio necesitas?'
+            : 'Not sure which service you need?'}
+          body={isEs
+            ? 'Iniciamos con un diagnóstico técnico gratuito para identificar exactamente qué requiere tu proyecto.'
+            : 'We start with a free technical assessment to identify exactly what your project needs.'}
+          primaryLabel={isEs ? 'Solicitar Diagnóstico' : 'Request Assessment'}
+          primaryHref={contactHref}
+          variant="light"
+        />
+      </SiteLayout>
+    </>
+  )
+}
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
+}
