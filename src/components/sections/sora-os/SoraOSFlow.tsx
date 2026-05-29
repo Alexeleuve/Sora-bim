@@ -1,19 +1,16 @@
 'use client'
 
 import Image from 'next/image'
-import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import ScrollReveal from '@/components/ui/ScrollReveal/ScrollReveal'
 import { cn } from '@/lib/utils'
 
 interface SoraOSFlowProps {
   headline: string
-  items: string[]
+  items:    string[]
 }
 
 export default function SoraOSFlow({ headline, items }: SoraOSFlowProps) {
-  const prefersReduced = useReducedMotion()
-
   return (
     <section
       className="relative overflow-hidden"
@@ -48,26 +45,25 @@ export default function SoraOSFlow({ headline, items }: SoraOSFlowProps) {
             </h2>
           </ScrollReveal>
 
-          {/* Flow items */}
+          {/* Flow items — each wrapped in ScrollReveal with stagger */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-0 flex-wrap">
             {items.map((item, i) => (
               <div key={item} className="flex flex-col sm:flex-row items-center">
-                <motion.div
-                  initial={{ opacity: 0, y: prefersReduced ? 0 : 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    delay: prefersReduced ? 0 : 0.2 + i * 0.15,
-                    duration: 0.45,
-                    ease: [0, 0, 0.2, 1],
-                  }}
+
+                {/* Item card — motion.div → div with animate-fade-in-up + delay */}
+                <div
                   className={cn(
                     'flex flex-col items-center gap-2 px-6 py-5',
                     'bg-white/[0.05] border border-white/10 rounded-xl',
                     'backdrop-blur-sm',
                     'min-w-[130px] text-center',
+                    'animate-fade-in-up',
                     i === 0 && 'border-brand-300/30 bg-brand-300/[0.06]'
                   )}
+                  style={{
+                    animationDelay:    `${200 + i * 150}ms`,
+                    animationFillMode: 'both',
+                  }}
                 >
                   <span
                     className={cn(
@@ -86,20 +82,20 @@ export default function SoraOSFlow({ headline, items }: SoraOSFlowProps) {
                   >
                     {item}
                   </span>
-                </motion.div>
+                </div>
 
-                {/* Arrow connector */}
+                {/* Arrow connector — motion.div → div with animate-fade-in + delay */}
                 {i < items.length - 1 && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: prefersReduced ? 0 : 0.35 + i * 0.15 }}
-                    className="flex items-center justify-center w-10 h-10 flex-shrink-0 rotate-90 sm:rotate-0"
+                  <div
+                    className="flex items-center justify-center w-10 h-10 flex-shrink-0 rotate-90 sm:rotate-0 animate-fade-in"
+                    style={{
+                      animationDelay:    `${350 + i * 150}ms`,
+                      animationFillMode: 'both',
+                    }}
                     aria-hidden="true"
                   >
                     <ArrowRight size={16} className="text-brand-300/40" />
-                  </motion.div>
+                  </div>
                 )}
               </div>
             ))}

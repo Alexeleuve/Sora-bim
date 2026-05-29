@@ -1,82 +1,24 @@
 import { defineRouting } from 'next-intl/routing'
 
+/**
+ * Routing configuration for next-intl.
+ *
+ * NOTE: `pathnames` is intentionally omitted.
+ *
+ * The `pathnames` feature rewrites locale-specific URLs (e.g. /sectores → /sectors)
+ * and requires a middleware.ts to resolve locales from those rewrites at runtime.
+ * With `output: 'export'` there is no middleware runtime — so `pathnames` causes
+ * next-intl's `getLocale()` to fall back to reading HTTP headers, which breaks
+ * static export with the error:
+ *   "Route couldn't be rendered statically because it used headers()"
+ *
+ * Locale-specific paths are handled by separate folder pairs instead:
+ *   /sectores/ + /sectors/   — each folder serves one locale
+ *   /servicios/ + /services/ — each folder serves one locale
+ *   /nosotros/ + /about/     — etc.
+ */
 export const routing = defineRouting({
   locales: ['es', 'en'],
   defaultLocale: 'es',
   localePrefix: 'always',
-  pathnames: {
-    '/': '/',
-    '/servicios': {
-      es: '/servicios',
-      en: '/services',
-    },
-    '/servicios/integracion-bim': {
-      es: '/servicios/integracion-bim',
-      en: '/services/bim-integration',
-    },
-    '/servicios/coordinacion-bim': {
-      es: '/servicios/coordinacion-bim',
-      en: '/services/bim-coordination',
-    },
-    '/servicios/sistemas-especiales': {
-      es: '/servicios/sistemas-especiales',
-      en: '/services/special-systems',
-    },
-    '/servicios/gestion-informacion': {
-      es: '/servicios/gestion-informacion',
-      en: '/services/information-management',
-    },
-    '/servicios/bim-4d': {
-      es: '/servicios/bim-4d',
-      en: '/services/bim-4d',
-    },
-    '/servicios/bim-5d': {
-      es: '/servicios/bim-5d',
-      en: '/services/bim-5d',
-    },
-    '/sectores': {
-      es: '/sectores',
-      en: '/sectors',
-    },
-    '/sectores/industrial': {
-      es: '/sectores/industrial',
-      en: '/sectors/industrial',
-    },
-    '/sectores/data-centers': {
-      es: '/sectores/data-centers',
-      en: '/sectors/data-centers',
-    },
-    '/sectores/hospitales': {
-      es: '/sectores/hospitales',
-      en: '/sectors/hospitals',
-    },
-    '/sectores/comercial': {
-      es: '/sectores/comercial',
-      en: '/sectors/commercial',
-    },
-    '/sectores/infraestructura': {
-      es: '/sectores/infraestructura',
-      en: '/sectors/infrastructure',
-    },
-    '/sora-os': {
-      es: '/sora-os',
-      en: '/sora-os',
-    },
-    '/blog': {
-      es: '/blog',
-      en: '/blog',
-    },
-    '/nosotros': {
-      es: '/nosotros',
-      en: '/about',
-    },
-    '/casos-de-exito': {
-      es: '/casos-de-exito',
-      en: '/case-studies',
-    },
-    '/contacto': {
-      es: '/contacto',
-      en: '/contact',
-    },
-  },
 })

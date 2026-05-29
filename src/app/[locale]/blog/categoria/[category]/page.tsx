@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import { generateMetadata as genMeta } from '@/lib/seo'
@@ -14,10 +13,21 @@ import BlogCategoryFilter from '@/components/sections/blog/BlogCategoryFilter'
 import BlogGrid from '@/components/sections/blog/BlogGrid'
 import NewsletterBanner from '@/components/sections/blog/NewsletterBanner'
 
+// ─── Static JSON imports — eliminates getTranslations() / headers() ──
+import esMessages from '@/messages/es.json'
+import enMessages from '@/messages/en.json'
+
+type Messages = typeof esMessages
+
+function getMessages(locale: string): Messages {
+  return locale === 'en' ? (enMessages as unknown as Messages) : esMessages
+}
+
+// ─── Categories ───────────────────────────────────────────────────────
 const VALID_CATEGORIES: BlogCategory[] = [
-  'bim','iso-19650','cde','sistemas-especiales',
-  'data-centers','hospitales','industria',
-  'coordinacion-bim','ia-aplicada-bim','transformacion-digital',
+  'bim', 'iso-19650', 'cde', 'sistemas-especiales',
+  'data-centers', 'hospitales', 'industria',
+  'coordinacion-bim', 'ia-aplicada-bim', 'transformacion-digital',
 ]
 
 type Props = {
@@ -26,18 +36,20 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, category } = await params
-  const t = await getTranslations('blog')
-
   if (!VALID_CATEGORIES.includes(category as BlogCategory)) return {}
 
-  const catLabel = t(`categories.${category}` as any)
-  const isEs = locale === 'es'
+  const m       = getMessages(locale)
+  const cats    = m.blog.categories as Record<string, string>
+  const catLabel = cats[category] ?? category
+  const isEs    = locale === 'es'
   const catPath = isEs ? 'categoria' : 'category'
 
   return genMeta(
     {
-      title: `${catLabel} — Blog`,
-      description: `Artículos sobre ${catLabel} en integración BIM, ISO 19650 y transformación digital para construcción.`,
+      title:       `${catLabel} — Blog`,
+      description: isEs
+        ? `Artículos sobre ${catLabel} en integración BIM, ISO 19650 y transformación digital para construcción.`
+        : `Articles on ${catLabel} in BIM integration, ISO 19650 and digital transformation for construction.`,
       canonical: `/${locale}/blog/${catPath}/${category}/`,
     },
     locale as Locale
@@ -49,76 +61,75 @@ export default async function BlogCategoryPage({ params }: Props) {
   if (!routing.locales.includes(locale as Locale)) notFound()
   if (!VALID_CATEGORIES.includes(category as BlogCategory)) notFound()
 
-  const t = await getTranslations('blog')
-  const tCommon = await getTranslations('common')
-  const isEs = locale === 'es'
+  const m       = getMessages(locale)
+  const cats    = m.blog.categories as Record<string, string>
+  const isEs    = locale === 'es'
   const catPath = isEs ? 'categoria' : 'category'
-  const catLabel = t(`categories.${category}` as any)
+  const catLabel = cats[category] ?? category
 
-  // Load posts filtered by category
-  const allPosts = await getAllBlogPosts(locale as Locale)
-  const posts = allPosts.filter((p) => p.category === category)
-
+  // fs-based content reads — safe at build time with generateStaticParams
+  const allPosts      = await getAllBlogPosts(locale as Locale)
+  const posts         = allPosts.filter((p) => p.category === category)
   const categoryStats = await getBlogCategories(locale as Locale)
+
   const categories = VALID_CATEGORIES
     .filter((key) => categoryStats.some((c) => c.category === key))
     .map((key) => ({
       value: key,
-      label: t(`categories.${key}` as any),
+      label: (cats[key] ?? key) as string,
       count: categoryStats.find((c) => c.category === key)?.count ?? 0,
     }))
 
   const breadcrumb = getBreadcrumbSchema([
-    { name: tCommon('breadcrumb.home'), url: `/${locale}/` },
-    { name: t('hero.label'), url: `/${locale}/blog` },
-    { name: catLabel, url: `/${locale}/blog/${catPath}/${category}` },
+    { name: m.common.breadcrumb.home,  url: `/${locale}/` },
+    { name: m.blog.hero.label,         url: `/${locale}/blog` },
+    { name: catLabel,                  url: `/${locale}/blog/${catPath}/${category}` },
   ])
+
+  const newsletter = m.blog.newsletter
 
   return (
     <>
       <SchemaOrg schema={breadcrumb} />
       <SiteLayout>
         <BlogHero
-          label={t('hero.label')}
+          label={m.blog.hero.label}
           headline={catLabel}
-          subheadline={t('hero.subheadline')}
+          subheadline={m.blog.hero.subheadline}
         />
 
         <section className="bg-neutral-50 section-py">
           <div className="container-section">
-            {/* Category filter */}
             <div className="mb-10">
               <BlogCategoryFilter
                 categories={categories}
                 activeCategory={category}
-                allLabel={t('categories.all')}
+                allLabel={cats['all'] ?? 'All'}
               />
             </div>
-
-            {/* Posts */}
             <BlogGrid
               posts={posts}
-              readTimeLabel={t('readTime')}
+              readTimeLabel={m.blog.readTime}
               locale={locale}
-              emptyMessage={t('noPostsFound')}
+              emptyMessage={m.blog.noPostsFound}
               featured={false}
             />
           </div>
         </section>
 
         <NewsletterBanner
-          headline={t('newsletter.headline')}
-          body={t('newsletter.body')}
-          placeholder={t('newsletter.placeholder')}
-          cta={t('newsletter.cta')}
-          privacy={t('newsletter.privacy')}
+          headline={newsletter.headline}
+          body={newsletter.body}
+          placeholder={newsletter.placeholder}
+          cta={newsletter.cta}
+          privacy={newsletter.privacy}
         />
       </SiteLayout>
     </>
   )
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
     VALID_CATEGORIES.map((category) => ({ locale, category }))
   )

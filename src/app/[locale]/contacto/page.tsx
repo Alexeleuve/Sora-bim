@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { routing } from '@/i18n/routing'
@@ -15,7 +14,14 @@ import SectionLabel from '@/components/ui/SectionLabel/SectionLabel'
 import ScrollReveal from '@/components/ui/ScrollReveal/ScrollReveal'
 import ContactForm from '@/components/shared/ContactForm'
 
-// WhatsApp SVG inline
+import esMessages from '@/messages/es.json'
+import enMessages from '@/messages/en.json'
+
+type Messages = typeof esMessages
+function getMsg(locale: string): Messages {
+  return locale === 'en' ? (enMessages as unknown as Messages) : esMessages
+}
+
 function WhatsAppIcon({ size = 16, className }: { size?: number; className?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -28,111 +34,58 @@ type Props = { params: Promise<{ locale: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
-  const seoData = getContactMetadata(locale as Locale)
-  return genMeta(seoData, locale as Locale)
+  return genMeta(getContactMetadata(locale as Locale), locale as Locale)
 }
 
 export default async function ContactPage({ params }: Props) {
   const { locale } = await params
   if (!routing.locales.includes(locale as Locale)) notFound()
 
-  const t       = await getTranslations('contact')
-  const tCommon = await getTranslations('common')
-  const isEs    = locale === 'es'
+  const m        = getMsg(locale)
+  const ct       = m.contact
+  const isEs     = locale === 'es'
   const basePath = isEs ? `/${locale}/contacto` : `/${locale}/contact`
+
+  const info      = ct.info
+  const diagItems = ct.diagnosis.items as unknown as string[]
 
   const schemas = [
     getOrganizationSchema(),
     getBreadcrumbSchema([
-      { name: tCommon('breadcrumb.home'), url: `/${locale}/` },
-      { name: t('hero.label'), url: basePath },
+      { name: m.common.breadcrumb.home, url: `/${locale}/` },
+      { name: ct.hero.label,            url: basePath },
     ]),
   ]
 
-  // Contact info from messages
-  const email        = t('info.email')
-  const phone        = t('info.phone')
-  const linkedin     = t('info.linkedin')
-  const linkedinUrl  = t('info.linkedinUrl')
-  const instagramUrl = t('info.instagramUrl')
-  const facebookUrl  = t('info.facebookUrl')
-  const whatsappUrl  = t('info.whatsappUrl')
-  const whatsappLabel = t('info.whatsappLabel')
-  const location     = t('info.location')
-  const diagItems    = t.raw('diagnosis.items') as string[]
-
   const directLinks = [
-    {
-      href: `mailto:${email}`,
-      icon: <Mail size={16} strokeWidth={1.5} className="text-brand-800" />,
-      label: isEs ? 'Correo' : 'Email',
-      value: email,
-      external: false,
-    },
-    {
-      href: whatsappUrl,
-      icon: <WhatsAppIcon size={16} className="text-brand-800" />,
-      label: 'WhatsApp',
-      value: phone,
-      external: true,
-    },
-    {
-      href: linkedinUrl,
-      icon: <Linkedin size={16} strokeWidth={1.5} className="text-brand-800" />,
-      label: 'LinkedIn',
-      value: linkedin,
-      external: true,
-    },
-    {
-      href: instagramUrl,
-      icon: <Instagram size={16} strokeWidth={1.5} className="text-brand-800" />,
-      label: 'Instagram',
-      value: '@sora.techbim',
-      external: true,
-    },
-    {
-      href: facebookUrl,
-      icon: <Facebook size={16} strokeWidth={1.5} className="text-brand-800" />,
-      label: 'Facebook',
-      value: 'sora.techbim',
-      external: true,
-    },
+    { href: `mailto:${info.email}`,  icon: <Mail size={16} strokeWidth={1.5} className="text-brand-800" />, label: isEs ? 'Correo' : 'Email', value: info.email, external: false },
+    { href: info.whatsappUrl,        icon: <WhatsAppIcon size={16} className="text-brand-800" />,           label: 'WhatsApp', value: info.phone, external: true },
+    { href: info.linkedinUrl,        icon: <Linkedin size={16} strokeWidth={1.5} className="text-brand-800" />, label: 'LinkedIn', value: info.linkedin, external: true },
+    { href: info.instagramUrl,       icon: <Instagram size={16} strokeWidth={1.5} className="text-brand-800" />, label: 'Instagram', value: '@sora.techbim', external: true },
+    { href: info.facebookUrl,        icon: <Facebook size={16} strokeWidth={1.5} className="text-brand-800" />,  label: 'Facebook', value: 'sora.techbim', external: true },
   ]
 
   return (
     <>
       <SchemaOrg schema={schemas} />
       <SiteLayout showFloatingCTA={false}>
-
-        {/* Hero */}
         <section className="bg-brand-800 pt-32 pb-16">
           <div className="container-section">
-            <SectionLabel dark>{t('hero.label')}</SectionLabel>
-            <h1
-              className="font-display font-bold text-white leading-[1.1] tracking-[-0.025em] mb-3"
-              style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
-            >
-              {t('hero.headline')}
+            <SectionLabel dark>{ct.hero.label}</SectionLabel>
+            <h1 className="font-display font-bold text-white leading-[1.1] tracking-[-0.025em] mb-3" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+              {ct.hero.headline}
             </h1>
-            <p className="font-sans text-lg text-white/65 leading-relaxed">
-              {t('hero.subheadline')}
-            </p>
+            <p className="font-sans text-lg text-white/65 leading-relaxed">{ct.hero.subheadline}</p>
           </div>
         </section>
 
-        {/* Content */}
         <section className="bg-neutral-50 section-py">
           <div className="container-section">
             <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 items-start">
-
-              {/* Left: Diagnosis + direct contact */}
               <div>
-                {/* Diagnosis card */}
                 <ScrollReveal delay={0}>
                   <div className="bg-white rounded-2xl p-8 border border-neutral-200 mb-6">
-                    <h2 className="font-display font-bold text-neutral-900 text-xl mb-6">
-                      {t('diagnosis.headline')}
-                    </h2>
+                    <h2 className="font-display font-bold text-neutral-900 text-xl mb-6">{ct.diagnosis.headline}</h2>
                     <ul className="space-y-4" role="list">
                       {diagItems.map((item, i) => (
                         <li key={i} className="flex items-start gap-3">
@@ -143,62 +96,37 @@ export default async function ContactPage({ params }: Props) {
                     </ul>
                   </div>
                 </ScrollReveal>
-
-                {/* Direct contact links */}
-                <ScrollReveal delay={0.1}>
+                <ScrollReveal delay={100}>
                   <div className="space-y-2.5">
                     {directLinks.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        target={link.external ? '_blank' : undefined}
-                        rel={link.external ? 'noopener noreferrer' : undefined}
-                        className={cn(
-                          'group flex items-center gap-3.5 p-4 rounded-xl',
-                          'bg-white border border-neutral-200',
-                          'hover:border-brand-300 hover:shadow-sm',
-                          'transition-all duration-200',
-                          'focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[2px]'
-                        )}
-                      >
-                        <div className="w-9 h-9 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0">
-                          {link.icon}
-                        </div>
+                      <a key={link.label} href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}
+                        className={cn('group flex items-center gap-3.5 p-4 rounded-xl bg-white border border-neutral-200 hover:border-brand-300 hover:shadow-sm transition-all duration-200 focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[2px]')}>
+                        <div className="w-9 h-9 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0">{link.icon}</div>
                         <div className="min-w-0">
-                          <p className="font-display font-semibold text-[0.6875rem] tracking-[0.06em] uppercase text-neutral-400 mb-0.5">
-                            {link.label}
-                          </p>
-                          <p className="font-sans text-sm text-neutral-800 group-hover:text-brand-500 transition-colors duration-150 truncate">
-                            {link.value}
-                          </p>
+                          <p className="font-display font-semibold text-[0.6875rem] tracking-[0.06em] uppercase text-neutral-400 mb-0.5">{link.label}</p>
+                          <p className="font-sans text-sm text-neutral-800 group-hover:text-brand-500 transition-colors duration-150 truncate">{link.value}</p>
                         </div>
                       </a>
                     ))}
                   </div>
                 </ScrollReveal>
-
-                {/* Location */}
-                <ScrollReveal delay={0.18}>
+                <ScrollReveal delay={180}>
                   <div className="flex items-center gap-2.5 mt-4 px-1">
                     <MapPin size={14} className="text-neutral-400 flex-shrink-0" aria-hidden="true" />
-                    <span className="font-sans text-sm text-neutral-500">{location}</span>
+                    <span className="font-sans text-sm text-neutral-500">{info.location}</span>
                   </div>
                 </ScrollReveal>
               </div>
-
-              {/* Right: Form */}
               <div>
-                <ScrollReveal delay={0.08}>
+                <ScrollReveal delay={80}>
                   <div className="bg-white rounded-2xl p-8 border border-neutral-200 shadow-sm">
                     <ContactForm />
                   </div>
                 </ScrollReveal>
               </div>
-
             </div>
           </div>
         </section>
-
       </SiteLayout>
     </>
   )

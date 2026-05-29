@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { getTranslations, getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import { generateMetadata as genMeta, getHomeMetadata } from '@/lib/seo'
@@ -9,7 +8,6 @@ import type { Locale } from '@/types'
 import SiteLayout from '@/components/layout/SiteLayout'
 import SchemaOrg from '@/components/shared/SchemaOrg'
 import CTASection from '@/components/shared/CTASection'
-
 import HeroSection from '@/components/sections/home/HeroSection'
 import AboutSection from '@/components/sections/home/AboutSection'
 import ServicesSection from '@/components/sections/home/ServicesSection'
@@ -21,171 +19,101 @@ import InnovationSection from '@/components/sections/home/InnovationSection'
 import SectorsSection from '@/components/sections/home/SectorsSection'
 import CoverageSection from '@/components/sections/home/CoverageSection'
 
-// ─── TYPES ───────────────────────────────────────────────────────────
-type Props = {
-  params: Promise<{ locale: string }>
+import esMessages from '@/messages/es.json'
+import enMessages from '@/messages/en.json'
+
+type Messages = typeof esMessages
+function getMsg(locale: string): Messages {
+  return locale === 'en' ? (enMessages as unknown as Messages) : esMessages
 }
 
-// ─── METADATA ────────────────────────────────────────────────────────
+type Props = { params: Promise<{ locale: string }> }
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
-  if (!routing.locales.includes(locale as Locale)) notFound()
-  const seoData = getHomeMetadata(locale as Locale)
-  return genMeta(seoData, locale as Locale)
+  return genMeta(getHomeMetadata(locale as Locale), locale as Locale)
 }
 
-// ─── PAGE ─────────────────────────────────────────────────────────────
 export default async function HomePage({ params }: Props) {
   const { locale } = await params
   if (!routing.locales.includes(locale as Locale)) notFound()
 
-  const t = await getTranslations('home')
-  const tServices = await getTranslations('services')
-  const tSectors = await getTranslations('sectors')
-  const tNav = await getTranslations('nav')
-
+  const m    = getMsg(locale)
   const isEs = locale === 'es'
-  const contactHref = isEs ? `/${locale}/contacto` : `/${locale}/contact`
+  const contactHref  = isEs ? `/${locale}/contacto`  : `/${locale}/contact`
   const servicesHref = isEs ? `/${locale}/servicios` : `/${locale}/services`
 
-  // ─── LOAD CONTENT FROM MESSAGES ─────────────────────────────────
+  const h  = m.home
+  const sv = m.services
+  const sc = m.sectors
+
   const heroData = {
-    label:        t('hero.label'),
-    headline:     t('hero.headline'),
-    subheadline:  t('hero.subheadline'),
-    ctaPrimary:   t('hero.ctaPrimary'),
-    ctaSecondary: t('hero.ctaSecondary'),
-    statement:    t('hero.statement'),
-    scrollLabel:  t('hero.scrollLabel'),
+    label: h.hero.label, headline: h.hero.headline, subheadline: h.hero.subheadline,
+    ctaPrimary: h.hero.ctaPrimary, ctaSecondary: h.hero.ctaSecondary,
+    statement: h.hero.statement, scrollLabel: h.hero.scrollLabel,
   }
-
   const aboutData = {
-    label:    t('about.label'),
-    headline: t('about.headline'),
-    body:     t('about.body'),
-    stats:    t.raw('about.stats') as { value: number; suffix: string; label: string }[],
-    cta:      t('about.cta'),
+    label: h.about.label, headline: h.about.headline, body: h.about.body,
+    stats: h.about.stats as unknown as { value: number; suffix: string; label: string }[],
+    cta: h.about.cta,
   }
-
   const servicesData = {
-    label:       t('services.label'),
-    headline:    t('services.headline'),
-    subheadline: t('services.subheadline'),
-    services:    tServices.raw('items') as {
-      slug: string; icon: string; title: string
-      shortDescription: string; standards: string[]; cta: string
-    }[],
-    ctaLabel: t('services.cta'),
+    label: h.services.label, headline: h.services.headline, subheadline: h.services.subheadline,
+    services: sv.items as unknown as { slug: string; icon: string; title: string; shortDescription: string; standards: string[]; cta: string }[],
+    ctaLabel: h.services.cta,
   }
-
   const methodologyData = {
-    label:       t('methodology.label'),
-    headline:    t('methodology.headline'),
-    steps:       t.raw('methodology.steps') as { number: string; title: string; description: string }[],
-    quote:       t('methodology.quote'),
-    quoteAuthor: t('methodology.quoteAuthor'),
+    label: h.methodology.label, headline: h.methodology.headline,
+    steps: h.methodology.steps as unknown as { number: string; title: string; description: string }[],
+    quote: h.methodology.quote, quoteAuthor: h.methodology.quoteAuthor,
   }
-
   const soraOsData = {
-    label:    t('soraOs.label'),
-    title:    t('soraOs.title'),
-    headline: t('soraOs.headline'),
-    body:     t('soraOs.body'),
-    pillars:  t.raw('soraOs.pillars') as { icon: string; title: string; description: string }[],
-    cta:      t('soraOs.cta'),
+    label: h.soraOs.label, title: h.soraOs.title, headline: h.soraOs.headline, body: h.soraOs.body,
+    pillars: h.soraOs.pillars as unknown as { icon: string; title: string; description: string }[],
+    cta: h.soraOs.cta,
   }
-
   const bimTechData = {
-    label:    t('bimTech.label'),
-    headline: t('bimTech.headline'),
-    body:     t('bimTech.body'),
-    tools:    t.raw('bimTech.tools') as string[],
-    cta:      t('bimTech.cta'),
+    label: h.bimTech.label, headline: h.bimTech.headline, body: h.bimTech.body,
+    tools: h.bimTech.tools as unknown as string[], cta: h.bimTech.cta,
   }
-
   const constructionData = {
-    label:    t('construction.label'),
-    headline: t('construction.headline'),
-    body:     t('construction.body'),
-    stats:    t.raw('construction.stats') as { value: number; suffix: string; label: string }[],
+    label: h.construction.label, headline: h.construction.headline, body: h.construction.body,
+    stats: h.construction.stats as unknown as { value: number; suffix: string; label: string }[],
   }
-
   const innovationData = {
-    label:    t('innovation.label'),
-    headline: t('innovation.headline'),
-    body:     t('innovation.body'),
-    flow:     t.raw('innovation.flow') as string[],
-    cta:      t('innovation.cta'),
+    label: h.innovation.label, headline: h.innovation.headline, body: h.innovation.body,
+    flow: h.innovation.flow as unknown as string[], cta: h.innovation.cta,
   }
-
   const sectorsData = {
-    label:    t('sectors.label'),
-    headline: t('sectors.headline'),
-    sectors:  (tSectors.raw('items') as { slug: string; icon: string; title: string; tagline: string }[]),
-    cta:      t('sectors.cta'),
+    label: h.sectors.label, headline: h.sectors.headline,
+    sectors: sc.items as unknown as { slug: string; icon: string; title: string; tagline: string }[],
+    cta: h.sectors.cta,
   }
-
   const coverageData = {
-    label:        t('coverage.label'),
-    headline:     t('coverage.headline'),
-    subheadline:  t('coverage.subheadline'),
-    locations:    t.raw('coverage.locations') as { city: string; role: string; description: string }[],
-    alliance:     t.raw('coverage.alliance') as { title: string; body: string },
+    label: h.coverage.label, headline: h.coverage.headline, subheadline: h.coverage.subheadline,
+    locations: h.coverage.locations as unknown as { city: string; role: string; description: string }[],
+    alliance: h.coverage.alliance as unknown as { title: string; body: string },
   }
-
-  const ctaData = {
-    headline:  t('cta.headline'),
-    body:      t('cta.body'),
-    primary:   t('cta.primary'),
-    secondary: t('cta.secondary'),
-  }
-
-  // ─── SCHEMA ─────────────────────────────────────────────────────
-  const schemas = [getOrganizationSchema(), getWebsiteSchema()]
+  const ctaData = { headline: h.cta.headline, body: h.cta.body, primary: h.cta.primary, secondary: h.cta.secondary }
 
   return (
     <>
-      <SchemaOrg schema={schemas} />
-
+      <SchemaOrg schema={[getOrganizationSchema(), getWebsiteSchema()]} />
       <SiteLayout>
-        {/* 01 — Hero */}
         <HeroSection {...heroData} />
-
-        {/* 02 — Quiénes Somos */}
         <AboutSection {...aboutData} />
-
-        {/* 03 — Servicios */}
         <ServicesSection {...servicesData} />
-
-        {/* 04 — Metodología */}
         <MethodologySection {...methodologyData} />
-
-        {/* 05 — SORA OS */}
         <SoraOSSection {...soraOsData} />
-
-        {/* 06 — Tecnología BIM */}
         <BIMTechSection {...bimTechData} />
-
-        {/* 07 — Construcción */}
         <ConstructionSection {...constructionData} />
-
-        {/* 08 — Innovación */}
         <InnovationSection {...innovationData} />
-
-        {/* 09 — Sectores */}
         <SectorsSection {...sectorsData} />
-
-        {/* 10 — Cobertura */}
         <CoverageSection {...coverageData} />
-
-        {/* 11 — CTA Final */}
         <CTASection
-          headline={ctaData.headline}
-          body={ctaData.body}
-          primaryLabel={ctaData.primary}
-          primaryHref={contactHref}
-          secondaryLabel={ctaData.secondary}
-          secondaryHref={servicesHref}
+          headline={ctaData.headline} body={ctaData.body}
+          primaryLabel={ctaData.primary} primaryHref={contactHref}
+          secondaryLabel={ctaData.secondary} secondaryHref={servicesHref}
           variant="light"
         />
       </SiteLayout>
@@ -193,7 +121,6 @@ export default async function HomePage({ params }: Props) {
   )
 }
 
-// ─── STATIC PARAMS ────────────────────────────────────────────────────
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }

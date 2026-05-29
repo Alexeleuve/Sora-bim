@@ -1,53 +1,103 @@
 'use client'
 
-import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion'
+import { useReducedMotionPref } from '@/hooks/useReducedMotion'
+import { useIntersection } from '@/hooks/useIntersection'
+import { cn } from '@/lib/utils'
 
+// ─── SCROLL REVEAL ───────────────────────────────────────────────────
 interface ScrollRevealProps {
   children:   React.ReactNode
-  delay?:     number
-  duration?:  number
-  yOffset?:   number
+  delay?:     number   // ms
   className?: string
   once?:      boolean
   threshold?: number
+  yOffset?:   number   // kept for API compat, controls which animation class
 }
 
-export default function ScrollReveal({ children, delay = 0, duration = 0.5, yOffset = 20, className, once = true, threshold = 0.12 }: ScrollRevealProps) {
-  const prefersReduced = useReducedMotion()
-  const variants = {
-    hidden:  { opacity: 0, y: prefersReduced ? 0 : yOffset },
-    visible: { opacity: 1, y: 0, transition: { duration: prefersReduced ? 0.01 : duration, delay: prefersReduced ? 0 : delay, ease: [0, 0, 0.2, 1] as [number,number,number,number] } },
-  }
-  return (
-    <LazyMotion features={domAnimation}>
-      <m.div initial="hidden" whileInView="visible" viewport={{ once, amount: threshold }} variants={variants} className={className}>
-        {children}
-      </m.div>
-    </LazyMotion>
-  )
-}
+export default function ScrollReveal({
+  children,
+  delay     = 0,
+  className,
+  once      = true,
+  threshold = 0.12,
+}: ScrollRevealProps) {
+  const prefersReduced = useReducedMotionPref()
+  const { ref, visible } = useIntersection({ threshold, once })
 
-interface StaggerContainerProps { children: React.ReactNode; staggerDelay?: number; className?: string; delayStart?: number }
-
-export function StaggerContainer({ children, staggerDelay = 0.08, className, delayStart = 0 }: StaggerContainerProps) {
-  const prefersReduced = useReducedMotion()
   return (
-    <LazyMotion features={domAnimation}>
-      <m.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.08 }}
-        variants={{ hidden: {}, visible: { transition: { staggerChildren: prefersReduced ? 0 : staggerDelay, delayChildren: prefersReduced ? 0 : delayStart } } }}
-        className={className}
-      >
-        {children}
-      </m.div>
-    </LazyMotion>
-  )
-}
-
-export function StaggerItem({ children, className }: { children: React.ReactNode; className?: string }) {
-  const prefersReduced = useReducedMotion()
-  return (
-    <m.div variants={{ hidden: { opacity: 0, y: prefersReduced ? 0 : 18 }, visible: { opacity: 1, y: 0, transition: { duration: prefersReduced ? 0.01 : 0.45, ease: [0,0,0.2,1] as [number,number,number,number] } } }} className={className}>
+    <div
+      ref={ref}
+      className={cn(className)}
+      style={{
+        opacity:           visible || prefersReduced ? 1 : 0,
+        transform:         visible || prefersReduced ? 'translateY(0)' : 'translateY(20px)',
+        transition:        prefersReduced
+          ? 'none'
+          : `opacity 500ms cubic-bezier(0,0,0.2,1) ${delay}ms, transform 500ms cubic-bezier(0,0,0.2,1) ${delay}ms`,
+      }}
+    >
       {children}
-    </m.div>
+    </div>
+  )
+}
+
+// ─── STAGGER CONTAINER ───────────────────────────────────────────────
+interface StaggerContainerProps {
+  children:      React.ReactNode
+  staggerDelay?: number  // ms between items
+  className?:    string
+  delayStart?:   number  // ms before first item
+}
+
+export function StaggerContainer({
+  children,
+  staggerDelay = 80,
+  className,
+  delayStart   = 0,
+}: StaggerContainerProps) {
+  const { ref, visible } = useIntersection({ threshold: 0.08, once: true })
+
+  return (
+    <div ref={ref} className={className} data-stagger-start={delayStart} data-stagger-step={staggerDelay}>
+      {visible
+        ? children
+        : <div style={{ opacity: 0 }}>{children}</div>
+      }
+    </div>
+  )
+}
+
+// ─── STAGGER ITEM ────────────────────────────────────────────────────
+export function StaggerItem({
+  children,
+  className,
+  index = 0,
+  baseDelay = 0,
+  stepDelay = 80,
+}: {
+  children:   React.ReactNode
+  className?: string
+  index?:     number
+  baseDelay?: number
+  stepDelay?: number
+}) {
+  const prefersReduced = useReducedMotionPref()
+  const { ref, visible } = useIntersection({ threshold: 0.08, once: true })
+  const delay = prefersReduced ? 0 : baseDelay + index * stepDelay
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity:   visible || prefersReduced ? 1 : 0,
+        transform: visible || prefersReduced ? 'translateY(0)' : 'translateY(18px)',
+        transition: prefersReduced
+          ? 'none'
+          : `opacity 450ms cubic-bezier(0,0,0.2,1) ${delay}ms, transform 450ms cubic-bezier(0,0,0.2,1) ${delay}ms`,
+      }}
+    >
+      {children}
+    </div>
   )
 }

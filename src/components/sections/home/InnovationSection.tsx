@@ -3,26 +3,24 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
-import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import SectionLabel from '@/components/ui/SectionLabel/SectionLabel'
 import ScrollReveal from '@/components/ui/ScrollReveal/ScrollReveal'
 
 interface InnovationSectionProps {
-  label: string
+  label:    string
   headline: string
-  body: string
-  flow: string[]
-  cta: string
+  body:     string
+  flow:     string[]
+  cta:      string
 }
 
 export default function InnovationSection({
   label, headline, body, flow, cta,
 }: InnovationSectionProps) {
-  const locale = useLocale()
+  const locale    = useLocale()
   const soraOsHref = `/${locale}/sora-os`
-  const prefersReduced = useReducedMotion()
 
   return (
     <section
@@ -35,7 +33,7 @@ export default function InnovationSection({
         className="absolute inset-0 opacity-[0.035]"
         style={{
           backgroundImage: 'radial-gradient(circle, rgba(56,189,248,1) 1px, transparent 1px)',
-          backgroundSize: '44px 44px',
+          backgroundSize:  '44px 44px',
         }}
         aria-hidden="true"
       />
@@ -43,8 +41,8 @@ export default function InnovationSection({
       <div className="container-section relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          {/* ─── LEFT: IMAGE ────────────────────────────────── */}
-          <ScrollReveal delay={0.1}>
+          {/* ─── LEFT: IMAGE ──────────────────────────────── */}
+          <ScrollReveal delay={100}>
             <div className="relative overflow-hidden rounded-xl aspect-square max-h-[480px]">
               <Image
                 src="/images/sora-os-nodes.jpg"
@@ -54,17 +52,16 @@ export default function InnovationSection({
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 loading="lazy"
               />
-              {/* No overlay — image speaks in dark context */}
             </div>
           </ScrollReveal>
 
-          {/* ─── RIGHT: CONTENT ─────────────────────────────── */}
+          {/* ─── RIGHT: CONTENT ───────────────────────────── */}
           <div>
             <ScrollReveal delay={0}>
               <SectionLabel dark>{label}</SectionLabel>
             </ScrollReveal>
 
-            <ScrollReveal delay={0.08}>
+            <ScrollReveal delay={80}>
               <h2
                 id="innovation-headline"
                 className="font-display font-bold text-white leading-[1.12] tracking-[-0.02em] mb-4"
@@ -74,23 +71,23 @@ export default function InnovationSection({
               </h2>
             </ScrollReveal>
 
-            <ScrollReveal delay={0.12}>
+            <ScrollReveal delay={120}>
               <span className="divider-accent mb-5" aria-hidden="true" />
             </ScrollReveal>
 
-            <ScrollReveal delay={0.16}>
+            <ScrollReveal delay={160}>
               <p className="font-sans text-base text-white/65 leading-relaxed mb-10">
                 {body}
               </p>
             </ScrollReveal>
 
             {/* Flow sequence */}
-            <ScrollReveal delay={0.2}>
+            <ScrollReveal delay={200}>
               <div
                 className="rounded-xl p-6 mb-8"
                 style={{
                   background: 'rgba(22,135,217,0.06)',
-                  border: '1px solid rgba(56,189,248,0.12)',
+                  border:     '1px solid rgba(56,189,248,0.12)',
                 }}
                 aria-label="Flujo de integración técnica"
               >
@@ -105,14 +102,9 @@ export default function InnovationSection({
                           />
                         </div>
                       )}
-                      {i > 0 && null}
                       <div className="flex items-center gap-3">
                         {i > 0 && (
-                          <ArrowRight
-                            size={12}
-                            className="text-brand-300/50 flex-shrink-0"
-                            aria-hidden="true"
-                          />
+                          <ArrowRight size={12} className="text-brand-300/50 flex-shrink-0" aria-hidden="true" />
                         )}
                         {i === 0 && (
                           <span
@@ -121,22 +113,19 @@ export default function InnovationSection({
                             aria-hidden="true"
                           />
                         )}
-                        <motion.span
-                          initial={{ opacity: 0, x: -8 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{
-                            delay: prefersReduced ? 0 : 0.3 + i * 0.12,
-                            duration: 0.4,
-                            ease: [0, 0, 0.2, 1],
-                          }}
+                        {/* motion.span → span with CSS animation + stagger delay */}
+                        <span
                           className={cn(
-                            'font-mono text-sm tracking-[-0.01em]',
+                            'font-mono text-sm tracking-[-0.01em] animate-fade-in',
                             i === 0 ? 'text-brand-300' : 'text-white/60'
                           )}
+                          style={{
+                            animationDelay:    `${300 + i * 120}ms`,
+                            animationFillMode: 'both',
+                          }}
                         >
                           {item}
-                        </motion.span>
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -144,7 +133,7 @@ export default function InnovationSection({
               </div>
             </ScrollReveal>
 
-            <ScrollReveal delay={0.28}>
+            <ScrollReveal delay={280}>
               <Link
                 href={soraOsHref}
                 className={cn(
@@ -156,10 +145,7 @@ export default function InnovationSection({
                 )}
               >
                 {cta}
-                <ArrowRight
-                  size={14}
-                  className="transition-transform duration-200 group-hover:translate-x-1"
-                />
+                <ArrowRight size={14} className="transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
             </ScrollReveal>
           </div>

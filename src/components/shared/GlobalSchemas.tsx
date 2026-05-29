@@ -1,15 +1,17 @@
-import { getOrganizationSchema, getWebsiteSchema } from '@/lib/schema'
+import { getOrganizationSchema, getWebsiteSchema, getLocalBusinessSchema } from '@/lib/schema'
 
 /**
- * GlobalSchemas — injects Organization and WebSite schema.org
+ * GlobalSchemas — injects Organization, WebSite and LocalBusiness schema.org
  * on every page. Include in the root layout or SiteLayout.
  * These are the foundational schemas that Google uses for
  * Knowledge Panel and Sitelinks.
  */
 export default function GlobalSchemas() {
-  const schemas = [getOrganizationSchema(),
-  getWebsiteSchema(),
-  getLocalBusinessSchema()]
+  const schemas = [
+    getOrganizationSchema(),
+    getWebsiteSchema(),
+    getLocalBusinessSchema(),
+  ]
 
   return (
     <>

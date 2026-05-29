@@ -1,7 +1,9 @@
 import Script from 'next/script'
 import type { Metadata, Viewport } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
+import type { AbstractIntlMessages } from 'next-intl'
+import esMessages from '../../../messages/es.json'
+import enMessages from '../../../messages/en.json'
 import { notFound } from 'next/navigation'
 import { Montserrat, Inter, IBM_Plex_Mono } from 'next/font/google'
 import { routing } from '@/i18n/routing'
@@ -112,7 +114,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound()
   }
 
-  const messages = await getMessages()
+  const messages = (locale === 'en' ? enMessages : esMessages) as unknown as AbstractIntlMessages
   const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
   return (

@@ -2,20 +2,19 @@
 
 import { useState, useId } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
-import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, AlertCircle, Send, ChevronDown } from 'lucide-react'
 import { cn, isValidEmail } from '@/lib/utils'
 import type { ContactFormData, ContactFormState } from '@/types'
 
 // ─── FLOATING LABEL INPUT ────────────────────────────────────────────
 interface FloatingInputProps {
-  id: string
-  label: string
-  value: string
-  onChange: (v: string) => void
-  type?: string
-  error?: string
-  required?: boolean
+  id:           string
+  label:        string
+  value:        string
+  onChange:     (v: string) => void
+  type?:        string
+  error?:       string
+  required?:    boolean
   autoComplete?: string
 }
 
@@ -63,22 +62,17 @@ function FloatingInput({
         aria-describedby={error ? `${id}-error` : undefined}
         aria-invalid={error ? 'true' : 'false'}
       />
-      <AnimatePresence>
-        {error && (
-          <motion.p
-            id={`${id}-error`}
-            role="alert"
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.15 }}
-            className="flex items-center gap-1.5 mt-1.5 text-[0.6875rem] text-error-600 font-sans"
-          >
-            <AlertCircle size={11} />
-            {error}
-          </motion.p>
-        )}
-      </AnimatePresence>
+      {/* motion.p → p with CSS fade-in-down */}
+      {error && (
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="flex items-center gap-1.5 mt-1.5 text-[0.6875rem] text-error-600 font-sans animate-fade-in-down"
+        >
+          <AlertCircle size={11} />
+          {error}
+        </p>
+      )}
     </div>
   )
 }
@@ -129,34 +123,28 @@ function FloatingTextarea({
         aria-describedby={error ? `${id}-error` : undefined}
         aria-invalid={error ? 'true' : 'false'}
       />
-      <AnimatePresence>
-        {error && (
-          <motion.p
-            id={`${id}-error`}
-            role="alert"
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.15 }}
-            className="flex items-center gap-1.5 mt-1.5 text-[0.6875rem] text-error-600 font-sans"
-          >
-            <AlertCircle size={11} />
-            {error}
-          </motion.p>
-        )}
-      </AnimatePresence>
+      {error && (
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="flex items-center gap-1.5 mt-1.5 text-[0.6875rem] text-error-600 font-sans animate-fade-in-down"
+        >
+          <AlertCircle size={11} />
+          {error}
+        </p>
+      )}
     </div>
   )
 }
 
 // ─── SELECT ──────────────────────────────────────────────────────────
 interface SelectProps {
-  id: string
-  label: string
-  value: string
+  id:       string
+  label:    string
+  value:    string
   onChange: (v: string) => void
-  options: { value: string; label: string }[]
-  error?: string
+  options:  { value: string; label: string }[]
+  error?:   string
   required?: boolean
 }
 
@@ -211,42 +199,31 @@ function FloatingSelect({ id, label, value, onChange, options, error, required }
           className="absolute right-0 top-1/2 translate-y-1 text-neutral-400 pointer-events-none"
         />
       </div>
-      <AnimatePresence>
-        {error && (
-          <motion.p
-            id={`${id}-error`}
-            role="alert"
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.15 }}
-            className="flex items-center gap-1.5 mt-1.5 text-[0.6875rem] text-error-600 font-sans"
-          >
-            <AlertCircle size={11} />
-            {error}
-          </motion.p>
-        )}
-      </AnimatePresence>
+      {error && (
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="flex items-center gap-1.5 mt-1.5 text-[0.6875rem] text-error-600 font-sans animate-fade-in-down"
+        >
+          <AlertCircle size={11} />
+          {error}
+        </p>
+      )}
     </div>
   )
 }
 
 // ─── MAIN FORM ───────────────────────────────────────────────────────
 export default function ContactForm() {
-  const t = useTranslations('contact.form')
-  const tCommon = useTranslations('common')
-  const locale = useLocale()
-  const formId = useId()
+  const t        = useTranslations('contact.form')
+  const tCommon  = useTranslations('common')
+  const locale   = useLocale()
+  const formId   = useId()
 
   const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    company: '',
-    email: '',
-    projectType: '',
-    message: '',
+    name: '', company: '', email: '', projectType: '', message: '',
   })
-
-  const [errors, setErrors] = useState<Partial<ContactFormData>>({})
+  const [errors, setErrors]       = useState<Partial<ContactFormData>>({})
   const [formState, setFormState] = useState<ContactFormState>({ status: 'idle' })
 
   const update = (field: keyof ContactFormData) => (value: string) => {
@@ -256,7 +233,7 @@ export default function ContactForm() {
 
   const validate = (): boolean => {
     const newErrors: Partial<ContactFormData> = {}
-    if (!formData.name.trim()) newErrors.name = tCommon('required')
+    if (!formData.name.trim())    newErrors.name    = tCommon('required')
     if (!formData.company.trim()) newErrors.company = tCommon('required')
     if (!formData.email.trim()) {
       newErrors.email = tCommon('required')
@@ -264,7 +241,7 @@ export default function ContactForm() {
       newErrors.email = tCommon('invalidEmail')
     }
     if (!formData.projectType) newErrors.projectType = tCommon('required')
-    if (!formData.message.trim()) newErrors.message = tCommon('required')
+    if (!formData.message.trim()) newErrors.message  = tCommon('required')
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -272,18 +249,13 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
-
     setFormState({ status: 'submitting' })
-
     try {
-      // Static export: use EmailJS or a form service
-      // For Node.js deployment: use /api/contact route
       const res = await fetch('/api/contact', {
-        method: 'POST',
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, locale }),
+        body:    JSON.stringify({ ...formData, locale }),
       })
-
       if (res.ok) {
         setFormState({ status: 'success', message: t('success') })
         setFormData({ name: '', company: '', email: '', projectType: '', message: '' })
@@ -295,16 +267,12 @@ export default function ContactForm() {
     }
   }
 
-  const projectTypeOptions = (t.raw('projectTypeOptions') as { value: string; label: string }[])
+  const projectTypeOptions = t.raw('projectTypeOptions') as { value: string; label: string }[]
 
+  // ── Success state — motion.div → div with CSS fade-in-up ──────────
   if (formState.status === 'success') {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="flex flex-col items-center justify-center py-12 text-center"
-      >
+      <div className="flex flex-col items-center justify-center py-12 text-center animate-fade-in-up">
         <div className="w-14 h-14 rounded-full bg-success-50 flex items-center justify-center mb-5">
           <CheckCircle2 size={28} className="text-success-600" />
         </div>
@@ -314,7 +282,7 @@ export default function ContactForm() {
         <p className="font-sans text-sm text-neutral-600 max-w-xs">
           {formState.message}
         </p>
-      </motion.div>
+      </div>
     )
   }
 
@@ -327,70 +295,41 @@ export default function ContactForm() {
     >
       <div className="space-y-6">
         <FloatingInput
-          id={`${formId}-name`}
-          label={t('name')}
-          value={formData.name}
-          onChange={update('name')}
-          error={errors.name}
-          required
-          autoComplete="name"
+          id={`${formId}-name`}    label={t('name')}        value={formData.name}
+          onChange={update('name')} error={errors.name}      required autoComplete="name"
         />
         <FloatingInput
-          id={`${formId}-company`}
-          label={t('company')}
-          value={formData.company}
-          onChange={update('company')}
-          error={errors.company}
-          required
-          autoComplete="organization"
+          id={`${formId}-company`}    label={t('company')}      value={formData.company}
+          onChange={update('company')} error={errors.company}    required autoComplete="organization"
         />
         <FloatingInput
-          id={`${formId}-email`}
-          label={t('email')}
-          value={formData.email}
-          onChange={update('email')}
-          type="email"
-          error={errors.email}
-          required
-          autoComplete="email"
+          id={`${formId}-email`}   label={t('email')}       value={formData.email}
+          onChange={update('email')} type="email"             error={errors.email}
+          required autoComplete="email"
         />
         <FloatingSelect
-          id={`${formId}-type`}
-          label={t('projectType')}
-          value={formData.projectType}
-          onChange={update('projectType')}
-          options={projectTypeOptions}
-          error={errors.projectType}
-          required
+          id={`${formId}-type`}     label={t('projectType')}  value={formData.projectType}
+          onChange={update('projectType')} options={projectTypeOptions}
+          error={errors.projectType} required
         />
         <FloatingTextarea
-          id={`${formId}-message`}
-          label={t('message')}
-          value={formData.message}
-          onChange={update('message')}
-          placeholder={t('messagePlaceholder')}
-          error={errors.message}
-          required
+          id={`${formId}-message`}    label={t('message')}      value={formData.message}
+          onChange={update('message')} placeholder={t('messagePlaceholder')}
+          error={errors.message} required
         />
       </div>
 
-      {/* Error state */}
-      <AnimatePresence>
-        {formState.status === 'error' && (
-          <motion.p
-            role="alert"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex items-center gap-2 mt-4 text-sm text-error-600 font-sans"
-          >
-            <AlertCircle size={14} />
-            {formState.message}
-          </motion.p>
-        )}
-      </AnimatePresence>
+      {/* Error state — motion.p → p with CSS fade-in */}
+      {formState.status === 'error' && (
+        <p
+          role="alert"
+          className="flex items-center gap-2 mt-4 text-sm text-error-600 font-sans animate-fade-in"
+        >
+          <AlertCircle size={14} />
+          {formState.message}
+        </p>
+      )}
 
-      {/* Submit */}
       <div className="mt-8">
         <button
           type="submit"

@@ -1,21 +1,29 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
-import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface HeroSectionProps {
-  headline: string
-  subheadline: string
-  ctaPrimary: string
+  headline:     string
+  subheadline:  string
+  ctaPrimary:   string
   ctaSecondary: string
-  statement: string
-  label: string
-  scrollLabel: string
+  statement:    string
+  label:        string
+  scrollLabel:  string
+}
+
+// Stagger delays (ms) matching original framer staggerChildren: 0.12s + delayChildren: 0.2s
+const DELAYS = {
+  label:     200,
+  headline:  320,
+  sub:       440,
+  ctas:      560,
+  statement: 900,
+  scroll:   1400,
 }
 
 export default function HeroSection({
@@ -27,36 +35,26 @@ export default function HeroSection({
   label,
   scrollLabel,
 }: HeroSectionProps) {
-  const locale = useLocale()
-  const prefersReduced = useReducedMotion()
-  const isEs = locale === 'es'
-  const contactHref = isEs ? `/${locale}/contacto` : `/${locale}/contact`
+  const locale    = useLocale()
+  const isEs      = locale === 'es'
+  const contactHref  = isEs ? `/${locale}/contacto`  : `/${locale}/contact`
   const servicesHref = isEs ? `/${locale}/servicios` : `/${locale}/services`
 
-  // Stagger variants
-  const container = {
-    hidden: {},
-    visible: {
-      transition: { staggerChildren: 0.12, delayChildren: 0.2 },
-    },
-  }
-
-  const item = {
-    hidden:   { opacity: 0, y: prefersReduced ? 0 : 24 },
-    visible:  { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0, 0, 0.2, 1] } },
-  }
-
-  const statementItem = {
-    hidden:   { opacity: 0 },
-    visible:  { opacity: 1, transition: { duration: 0.5, delay: prefersReduced ? 0 : 0.9 } },
-  }
+  // Shared style factory — fade-in-up with individual delay
+  const fadeUp = (delay: number): React.CSSProperties => ({
+    animationName:      'fade-in-up',
+    animationDuration:  '600ms',
+    animationTimingFunction: 'cubic-bezier(0,0,0.2,1)',
+    animationDelay:     `${delay}ms`,
+    animationFillMode:  'both',
+  })
 
   return (
     <section
       className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden"
       aria-label="Presentación principal de SORA"
     >
-      {/* ─── BACKGROUND IMAGE ──────────────────────────────── */}
+      {/* ─── BACKGROUND IMAGE ────────────────────────────── */}
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/hero-facade.jpg"
@@ -64,13 +62,9 @@ export default function HeroSection({
           fill
           priority
           quality={90}
-          className={cn(
-            'object-cover object-center',
-            !prefersReduced && 'animate-ken-burns'
-          )}
+          className="object-cover object-center animate-ken-burns"
           sizes="100vw"
         />
-        {/* Gradient overlay — brand blue left to transparent right */}
         <div
           className="absolute inset-0"
           style={{
@@ -78,57 +72,50 @@ export default function HeroSection({
           }}
           aria-hidden="true"
         />
-        {/* Bottom gradient for smooth transition */}
         <div
           className="absolute bottom-0 left-0 right-0 h-32"
-          style={{
-            background: 'linear-gradient(to bottom, transparent, rgba(248,250,252,0.08))',
-          }}
+          style={{ background: 'linear-gradient(to bottom, transparent, rgba(248,250,252,0.08))' }}
           aria-hidden="true"
         />
       </div>
 
-      {/* ─── CONTENT ───────────────────────────────────────── */}
+      {/* ─── CONTENT ─────────────────────────────────────── */}
       <div className="container-section relative z-10 pt-24 pb-20">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          className="max-w-2xl xl:max-w-3xl"
-        >
+        <div className="max-w-2xl xl:max-w-3xl">
+
           {/* Label */}
-          <motion.p
-            variants={item}
+          <p
             className="inline-flex items-center gap-2.5 font-display font-semibold text-[0.6875rem] tracking-[0.14em] uppercase text-white/70 mb-5"
+            style={fadeUp(DELAYS.label)}
           >
             <span className="block w-6 h-px bg-brand-300/80" aria-hidden="true" />
             {label}
-          </motion.p>
+          </p>
 
           {/* Headline */}
-          <motion.h1
-            variants={item}
+          <h1
             className={cn(
               'font-display font-extrabold text-white leading-[1.05] tracking-[-0.03em]',
               'text-[2.25rem] sm:text-[3rem] md:text-[3.5rem] lg:text-[4rem]',
               'mb-5'
             )}
+            style={fadeUp(DELAYS.headline)}
           >
             {headline}
-          </motion.h1>
+          </h1>
 
           {/* Subheadline */}
-          <motion.p
-            variants={item}
+          <p
             className="font-sans text-lg text-white/80 leading-relaxed max-w-xl mb-10"
+            style={fadeUp(DELAYS.sub)}
           >
             {subheadline}
-          </motion.p>
+          </p>
 
           {/* CTAs */}
-          <motion.div
-            variants={item}
+          <div
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-10"
+            style={fadeUp(DELAYS.ctas)}
           >
             <Link
               href={contactHref}
@@ -143,10 +130,7 @@ export default function HeroSection({
               )}
             >
               {ctaPrimary}
-              <ArrowRight
-                size={15}
-                className="transition-transform duration-200 group-hover:translate-x-1"
-              />
+              <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" />
             </Link>
             <Link
               href={servicesHref}
@@ -163,42 +147,31 @@ export default function HeroSection({
             >
               {ctaSecondary}
             </Link>
-          </motion.div>
+          </div>
 
           {/* Brand Statement */}
-          <motion.div variants={statementItem}>
-            <div
-              className="inline-flex items-center gap-3"
-              role="doc-subtitle"
-            >
-              <span
-                className="block w-10 h-px bg-white/25"
-                aria-hidden="true"
-              />
+          <div style={fadeUp(DELAYS.statement)}>
+            <div className="inline-flex items-center gap-3" role="doc-subtitle">
+              <span className="block w-10 h-px bg-white/25" aria-hidden="true" />
               <p className="font-display font-medium text-[0.8125rem] tracking-[0.08em] uppercase text-brand-300">
                 {statement}
               </p>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
 
-      {/* ─── SCROLL INDICATOR ──────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.5 }}
+      {/* ─── SCROLL INDICATOR ────────────────────────────── */}
+      <div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5"
+        style={fadeUp(DELAYS.scroll)}
         aria-hidden="true"
       >
         <span className="font-display font-medium text-[0.5625rem] tracking-[0.14em] uppercase text-white/40">
           {scrollLabel}
         </span>
-        <ChevronDown
-          size={18}
-          className="text-white/40 animate-bounce-y"
-        />
-      </motion.div>
+        <ChevronDown size={18} className="text-white/40 animate-bounce-y" />
+      </div>
     </section>
   )
 }

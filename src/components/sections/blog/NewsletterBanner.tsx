@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle2 } from 'lucide-react'
 import { cn, isValidEmail } from '@/lib/utils'
 
@@ -53,79 +52,71 @@ export default function NewsletterBanner({
             {body}
           </p>
 
-          <AnimatePresence mode="wait">
-            {status === 'success' ? (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center justify-center gap-3 text-success-100"
-              >
-                <CheckCircle2 size={20} />
-                <span className="font-sans text-sm">
-                  ¡Suscripción confirmada! Recibirás el próximo artículo.
-                </span>
-              </motion.div>
-            ) : (
-              <motion.form
-                key="form"
-                onSubmit={handleSubmit}
-                className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                aria-label="Formulario de suscripción al newsletter"
-              >
-                <div className="flex-1">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => { setEmail(e.target.value); setError('') }}
-                    placeholder={placeholder}
-                    required
-                    aria-label={placeholder}
-                    aria-describedby={error ? 'newsletter-error' : undefined}
-                    className={cn(
-                      'w-full bg-white/10 border rounded-sm',
-                      'font-sans text-sm text-white placeholder-white/40',
-                      'px-4 py-3 outline-none',
-                      'transition-all duration-150',
-                      'focus:bg-white/15 focus:border-brand-300',
-                      error ? 'border-error-400' : 'border-white/20'
-                    )}
-                  />
-                  {error && (
-                    <p id="newsletter-error" className="text-xs text-error-300 mt-1.5 text-left">
-                      {error}
-                    </p>
-                  )}
-                </div>
-                <button
-                  type="submit"
-                  disabled={status === 'submitting'}
+          {status === 'success' ? (
+            <div className="flex items-center justify-center gap-3 text-success-100">
+              <CheckCircle2 size={20} />
+              <span className="font-sans text-sm">
+                ¡Suscripción confirmada! Recibirás el próximo artículo.
+              </span>
+            </div>
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+              aria-label="Formulario de suscripción al newsletter"
+            >
+              <div className="flex-1">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setError('') }}
+                  placeholder={placeholder}
+                  required
+                  aria-label={placeholder}
+                  aria-describedby={error ? 'newsletter-error' : undefined}
                   className={cn(
-                    'inline-flex items-center justify-center gap-2',
-                    'bg-brand-300 text-neutral-900 rounded-sm',
-                    'font-display font-semibold text-[0.6875rem] tracking-[0.06em] uppercase',
-                    'px-6 py-3 whitespace-nowrap',
-                    'transition-all duration-200',
-                    'hover:bg-white',
-                    'disabled:opacity-60 disabled:cursor-not-allowed',
-                    'focus-visible:outline-[3px] focus-visible:outline-white focus-visible:outline-offset-[2px]'
+                    'w-full bg-white/10 border rounded-sm',
+                    'font-sans text-sm text-white placeholder-white/40',
+                    'px-4 py-3 outline-none',
+                    'transition-all duration-150',
+                    'focus:bg-white/15 focus:border-brand-300',
+                    error ? 'border-error-400' : 'border-white/20'
                   )}
-                >
-                  {status === 'submitting' ? (
-                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                  ) : (
-                    <>
-                      <Send size={13} />
-                      {cta}
-                    </>
-                  )}
-                </button>
-              </motion.form>
-            )}
-          </AnimatePresence>
+                />
+                {error && (
+                  <p id="newsletter-error" className="text-xs text-error-300 mt-1.5 text-left">
+                    {error}
+                  </p>
+                )}
+              </div>
+              <button
+                type="submit"
+                disabled={status === 'submitting'}
+                className={cn(
+                  'inline-flex items-center justify-center gap-2',
+                  'bg-brand-300 text-neutral-900 rounded-sm',
+                  'font-display font-semibold text-[0.6875rem] tracking-[0.06em] uppercase',
+                  'px-6 py-3 whitespace-nowrap',
+                  'transition-all duration-200',
+                  'hover:bg-white',
+                  'disabled:opacity-60 disabled:cursor-not-allowed',
+                  'focus-visible:outline-[3px] focus-visible:outline-white focus-visible:outline-offset-[2px]'
+                )}
+              >
+                {status === 'submitting' ? (
+                  <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                ) : (
+                  <>
+                    <Send size={13} />
+                    {cta}
+                  </>
+                )}
+              </button>
+            </form>
+          )}
 
           <p className="font-sans text-xs text-white/35 mt-4">{privacy}</p>
         </div>
