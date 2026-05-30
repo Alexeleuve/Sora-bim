@@ -7,14 +7,15 @@ import { useLocale, useTranslations } from 'next-intl'
 import { AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { trackDiagnosticClick } from '@/lib/analytics'
 import LanguageSwitcher from './LanguageSwitcher'
 
 export default function Header() {
-  const t = useTranslations('nav')
-  const locale = useLocale()
+  const t        = useTranslations('nav')
+  const locale   = useLocale()
   const pathname = usePathname()
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled,    setScrolled]    = useState(false)
+  const [mobileOpen,  setMobileOpen]  = useState(false)
   const isEs = locale === 'es'
 
   useEffect(() => {
@@ -24,10 +25,7 @@ export default function Header() {
       rafId = requestAnimationFrame(() => setScrolled(window.scrollY > 80))
     }
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      cancelAnimationFrame(rafId)
-    }
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(rafId) }
   }, [])
 
   useEffect(() => { setMobileOpen(false) }, [pathname])
@@ -46,7 +44,11 @@ export default function Header() {
   ]
 
   const contactHref = isEs ? `/${locale}/contacto` : `/${locale}/contact`
-  const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/')
+  const isActive    = (href: string) => pathname === href || pathname.startsWith(href + '/')
+  const ctaLabel    = t('cta')
+
+  const handleCtaClick = (location: string) =>
+    trackDiagnosticClick({ cta_label: ctaLabel, cta_location: location, href: contactHref })
 
   return (
     <>
@@ -88,12 +90,8 @@ export default function Header() {
                     'transition-colors duration-200',
                     'focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[3px] rounded-sm',
                     isActive(link.href)
-                      ? scrolled
-                        ? 'text-brand-800 border-b-2 border-brand-500 pb-px'
-                        : 'text-white border-b-2 border-white/60 pb-px'
-                      : scrolled
-                        ? 'text-neutral-700 hover:text-brand-800'
-                        : 'text-white/85 hover:text-white'
+                      ? scrolled ? 'text-brand-800 border-b-2 border-brand-500 pb-px' : 'text-white border-b-2 border-white/60 pb-px'
+                      : scrolled ? 'text-neutral-700 hover:text-brand-800' : 'text-white/85 hover:text-white'
                   )}
                 >
                   {t(link.labelKey)}
@@ -106,6 +104,7 @@ export default function Header() {
               <LanguageSwitcher dark={!scrolled} />
               <Link
                 href={contactHref}
+                onClick={() => handleCtaClick('header_desktop')}
                 className={cn(
                   'inline-flex items-center gap-2',
                   'font-display font-semibold text-[0.6875rem] tracking-[0.04em] uppercase',
@@ -116,7 +115,7 @@ export default function Header() {
                     : 'bg-white/15 text-white border border-white/30 hover:bg-white/25'
                 )}
               >
-                {t('cta')}
+                {ctaLabel}
               </Link>
             </div>
 
@@ -127,9 +126,7 @@ export default function Header() {
                 'lg:hidden flex items-center justify-center w-11 h-11 rounded-sm',
                 'transition-colors duration-200',
                 'focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[3px]',
-                scrolled
-                  ? 'text-neutral-700 hover:text-brand-800'
-                  : 'text-white hover:text-white/80'
+                scrolled ? 'text-neutral-700 hover:text-brand-800' : 'text-white hover:text-white/80'
               )}
               aria-label={t('openMenu')}
               aria-expanded={mobileOpen}
@@ -144,15 +141,12 @@ export default function Header() {
       <AnimatePresence>
         {mobileOpen && (
           <>
-            {/* Backdrop — plain div, CSS transition handles fade */}
             <div
               key="bd"
               className="fixed inset-0 z-[95] bg-black/20 backdrop-blur-sm lg:hidden animate-fade-in"
               onClick={() => setMobileOpen(false)}
               aria-hidden="true"
             />
-
-            {/* Drawer — plain div, CSS transition handles slide */}
             <div
               key="drawer"
               role="navigation"
@@ -198,9 +192,7 @@ export default function Header() {
                           'flex items-center justify-between py-4',
                           'font-display font-bold text-2xl tracking-[-0.01em]',
                           'border-b border-white/[0.08] transition-colors duration-150',
-                          isActive(link.href)
-                            ? 'text-brand-300'
-                            : 'text-white hover:text-white/80'
+                          isActive(link.href) ? 'text-brand-300' : 'text-white hover:text-white/80'
                         )}
                       >
                         {t(link.labelKey)}
@@ -215,10 +207,13 @@ export default function Header() {
               <div className="px-6 pb-10 space-y-4">
                 <Link
                   href={contactHref}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() => {
+                    setMobileOpen(false)
+                    handleCtaClick('header_mobile_drawer')
+                  }}
                   className="flex items-center justify-center w-full bg-brand-500 text-white rounded-sm font-display font-semibold text-sm tracking-[0.04em] uppercase py-4 hover:bg-brand-600 transition-colors duration-200"
                 >
-                  {t('cta')}
+                  {ctaLabel}
                 </Link>
                 <div className="flex justify-center">
                   <LanguageSwitcher dark />

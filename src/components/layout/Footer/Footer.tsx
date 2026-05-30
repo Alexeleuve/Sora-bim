@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { Mail, Linkedin, MapPin, Instagram, Facebook } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { trackWhatsAppClick, trackEmailClick } from '@/lib/analytics'
 
 function WhatsAppIcon({ size = 15 }: { size?: number }) {
   return (
@@ -39,7 +40,6 @@ export default function Footer() {
 
   const linkCls = 'font-sans text-sm text-white/60 hover:text-white transition-colors duration-150 focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[2px] rounded-sm'
 
-  // Social icons — left column only
   const socialLinks = [
     { href: t('social.linkedin'),  label: 'LinkedIn',                     icon: <Linkedin size={15} /> },
     { href: t('social.instagram'), label: 'Instagram',                    icon: <Instagram size={15} /> },
@@ -47,37 +47,31 @@ export default function Footer() {
     { href: t('social.whatsapp'),  label: t('social.whatsappLabel'),      icon: <WhatsAppIcon size={15} /> },
   ]
 
+  const emailHref    = `mailto:${tContact('email')}`
+  const whatsappHref = tContact('whatsappUrl')
+
   return (
     <footer className="bg-neutral-900" role="contentinfo">
       <div className="container-section">
 
-        {/* ─── TOP GRID ───────────────────────────────────── */}
+        {/* Top grid */}
         <div className="pt-16 pb-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-12 xl:gap-16 border-b border-white/[0.08]">
 
-          {/* Col 1 — Brand + social icons */}
+          {/* Col 1 — Brand + social */}
           <div className="xl:col-span-1">
             <Link
               href={`/${locale}`}
               className="inline-flex mb-3 group hover:opacity-80 transition-opacity duration-200 focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[3px] rounded-sm"
               aria-label="SORA | Technical BIM Integration — ir al inicio"
             >
-              <img
-                src="/images/sora-logo-white.png"
-                alt="SORA | Technical BIM Integration"
-                className="h-14 w-auto"
-                width={280}
-                height={56}
-              />
+              <img src="/images/sora-logo-white.png" alt="SORA | Technical BIM Integration" className="h-14 w-auto" width={280} height={56} />
             </Link>
-            <p className="font-sans font-medium text-[0.625rem] tracking-[0.18em] uppercase text-white/90 mb-6">
-              Technical BIM Integration
-            </p>
+            <p className="font-sans font-medium text-[0.625rem] tracking-[0.18em] uppercase text-white/90 mb-6">Technical BIM Integration</p>
             <p className="font-sans text-sm text-white/55 leading-relaxed mb-3 max-w-[220px]">{t('description')}</p>
             <p className="flex items-center gap-2 font-sans text-xs text-white/35 mb-5">
               <MapPin size={12} aria-hidden="true" />
               {t('location')}
             </p>
-            {/* Social icons grouped here */}
             <div className="flex items-center gap-2">
               {socialLinks.map((s) => (
                 <a
@@ -86,11 +80,15 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
+                  onClick={
+                    s.href === t('social.whatsapp')
+                      ? () => trackWhatsAppClick({ location: 'footer_social', href: s.href })
+                      : undefined
+                  }
                   className={cn(
                     'flex items-center justify-center w-9 h-9 rounded-sm',
                     'bg-white/[0.06] hover:bg-white/[0.14] border border-white/10 hover:border-white/25',
-                    'text-white/55 hover:text-white',
-                    'transition-all duration-200',
+                    'text-white/55 hover:text-white transition-all duration-200',
                     'focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[2px]'
                   )}
                 >
@@ -105,9 +103,7 @@ export default function Footer() {
             <h3 className="font-display font-semibold text-[0.6875rem] tracking-[0.08em] uppercase text-white/30 mb-5">{t('services')}</h3>
             <ul className="space-y-3">
               {serviceLinks.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className={linkCls}>{l.label}</Link>
-                </li>
+                <li key={l.href}><Link href={l.href} className={linkCls}>{l.label}</Link></li>
               ))}
             </ul>
           </div>
@@ -117,33 +113,33 @@ export default function Footer() {
             <h3 className="font-display font-semibold text-[0.6875rem] tracking-[0.08em] uppercase text-white/30 mb-5">{t('company')}</h3>
             <ul className="space-y-3">
               {companyLinks.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className={linkCls}>{l.label}</Link>
-                </li>
+                <li key={l.href}><Link href={l.href} className={linkCls}>{l.label}</Link></li>
               ))}
             </ul>
           </div>
 
-          {/* Col 4 — Contact: email · WhatsApp (número) · LinkedIn */}
+          {/* Col 4 — Contact */}
           <div>
             <h3 className="font-display font-semibold text-[0.6875rem] tracking-[0.08em] uppercase text-white/30 mb-5">{t('contact')}</h3>
             <ul className="space-y-3">
               {/* Email */}
               <li>
                 <a
-                  href={`mailto:${tContact('email')}`}
+                  href={emailHref}
+                  onClick={() => trackEmailClick({ location: 'footer_contact', href: emailHref })}
                   className={cn(linkCls, 'flex items-center gap-2.5')}
                 >
                   <Mail size={13} className="text-white/30 flex-shrink-0" />
                   {tContact('email')}
                 </a>
               </li>
-              {/* WhatsApp — shows the phone number as label, links to wa.me */}
+              {/* WhatsApp */}
               <li>
                 <a
-                  href={tContact('whatsappUrl')}
+                  href={whatsappHref}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackWhatsAppClick({ location: 'footer_contact', href: whatsappHref })}
                   className={cn(linkCls, 'flex items-center gap-2.5')}
                 >
                   <span className="text-white/30 flex-shrink-0"><WhatsAppIcon size={13} /></span>
@@ -163,8 +159,6 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-
-            {/* Standards badge */}
             <div className="mt-6">
               <div className="inline-flex items-center gap-2 bg-white/[0.04] border border-white/10 rounded-sm px-3 py-2">
                 <span className="font-mono text-[0.6875rem] text-brand-300 tracking-[-0.01em]">ISO 19650</span>
@@ -177,21 +171,15 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ─── BOTTOM BAR ─────────────────────────────────── */}
+        {/* Bottom bar */}
         <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-sans text-xs text-white/30 text-center sm:text-left">{t('copyright')}</p>
           <div className="flex items-center gap-4">
-            <Link
-              href={isEs ? `/${locale}/privacidad` : `/${locale}/privacy`}
-              className="font-sans text-xs text-white/30 hover:text-white/60 transition-colors duration-150 focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[2px] rounded-sm"
-            >
+            <Link href={isEs ? `/${locale}/privacidad` : `/${locale}/privacy`} className="font-sans text-xs text-white/30 hover:text-white/60 transition-colors duration-150 focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[2px] rounded-sm">
               {t('privacy')}
             </Link>
             <span className="text-white/20 text-xs">·</span>
-            <Link
-              href={isEs ? `/${locale}/terminos` : `/${locale}/terms`}
-              className="font-sans text-xs text-white/30 hover:text-white/60 transition-colors duration-150 focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[2px] rounded-sm"
-            >
+            <Link href={isEs ? `/${locale}/terminos` : `/${locale}/terms`} className="font-sans text-xs text-white/30 hover:text-white/60 transition-colors duration-150 focus-visible:outline-[3px] focus-visible:outline-brand-300 focus-visible:outline-offset-[2px] rounded-sm">
               {t('terms')}
             </Link>
           </div>

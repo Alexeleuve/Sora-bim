@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { trackDiagnosticClick } from '@/lib/analytics'
 
 interface FloatingCTAProps {
   label:     string
@@ -24,8 +25,6 @@ export default function FloatingCTA({ label, href, className }: FloatingCTAProps
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // CSS transition approach — always rendered, translated off-screen when hidden
-  // This avoids AnimatePresence/motion.div while keeping smooth enter/exit
   return (
     <div
       className={cn(
@@ -41,6 +40,13 @@ export default function FloatingCTA({ label, href, className }: FloatingCTAProps
       <Link
         href={href}
         tabIndex={visible ? undefined : -1}
+        onClick={() =>
+          trackDiagnosticClick({
+            cta_label:    label,
+            cta_location: 'floating_cta',
+            href,
+          })
+        }
         className={cn(
           'flex items-center justify-center w-full',
           'bg-brand-500 text-white rounded-sm',
