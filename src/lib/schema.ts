@@ -11,8 +11,13 @@ export function getOrganizationSchema() {
     name: 'SORA | Technical BIM Integration',
     alternateName: 'SORA BIM',
     url: BASE_URL,
+    founder: {
+      '@type': 'Person',
+      name: 'Alejandro Leyva Valle',
+      jobTitle: 'Founder & BIM Director',
+    },
     logo: { '@type': 'ImageObject', url: `${BASE_URL}/images/sora-logo.png`, width: 200, height: 60 },
-    description: 'Empresa especializada en Integración BIM de Sistemas Especiales para proyectos industriales, data centers, hospitales e infraestructura crítica. Coordinación BIM, ISO 19650, CDE, BMS, Telecomunicaciones, Seguridad Electrónica y Gestión de Información.',
+    description: 'Empresa especializada en Integración BIM, Coordinación BIM y Gestión de Información para sistemas especiales en proyectos industriales, hospitales, data centers e infraestructura crítica. Implementación ISO 19650, CDE, BMS, telecomunicaciones y seguridad electrónica.',
     address: { '@type': 'PostalAddress', addressCountry: 'MX', addressRegion: 'Ciudad de México', addressLocality: 'Ciudad de México' },
     contactPoint: { '@type': 'ContactPoint', contactType: 'customer service', email: 'info@sorafusion.com', availableLanguage: ['Spanish', 'English'] },
     sameAs: [ 'https://www.linkedin.com/company/sora-techbim',
@@ -33,8 +38,19 @@ export function getOrganizationSchema() {
  '4D BIM',
  '5D BIM',
  'Telecommunications BIM',
- 'Security Systems BIM'],
-    areaServed: { '@type': 'Country', name: 'Mexico' },
+ 'Security Systems BIM',
+ 'BIM Management',
+ 'MEP Coordination',
+ 'Digital Twin',
+ 'Autodesk Construction Cloud',
+ 'BIM Consulting',
+ 'Healthcare BIM',
+ 'Data Center Design',
+ 'Industrial Facilities BIM'],
+    areaServed: [
+      { '@type': 'Country', name: 'Mexico' },
+      { '@type': 'Country', name: 'United States' },
+    ],
   }
 }
 
@@ -140,6 +156,10 @@ export function getLocalBusinessSchema() {
     url: BASE_URL,
     email: 'info@sorafusion.com',
     address: { '@type': 'PostalAddress', addressCountry: 'MX', addressRegion: 'CDMX', addressLocality: 'Ciudad de México' },
+    areaServed: [
+      { '@type': 'Country', name: 'Mexico' },
+      { '@type': 'Country', name: 'United States' },
+    ],
     geo: { '@type': 'GeoCoordinates', latitude: 19.4326, longitude: -99.1332 },
     openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday'], opens: '09:00', closes: '18:00' }],
     priceRange: '$$$$',
