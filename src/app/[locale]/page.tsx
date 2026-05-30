@@ -1,126 +1,51 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
-import { generateMetadata as genMeta, getHomeMetadata } from '@/lib/seo'
-import { getOrganizationSchema, getWebsiteSchema } from '@/lib/schema'
-import type { Locale } from '@/types'
-
+import { generateMetadata as genMeta, getBlogMetadata } from '@/lib/seo'
+import { getBreadcrumbSchema } from '@/lib/schema'
+import { getAllBlogPosts, getBlogCategories } from '@/lib/content'
+import type { Locale, BlogCategory } from '@/types'
 import SiteLayout from '@/components/layout/SiteLayout'
 import SchemaOrg from '@/components/shared/SchemaOrg'
-import CTASection from '@/components/shared/CTASection'
-import HeroSection from '@/components/sections/home/HeroSection'
-import AboutSection from '@/components/sections/home/AboutSection'
-import ServicesSection from '@/components/sections/home/ServicesSection'
-import MethodologySection from '@/components/sections/home/MethodologySection'
-import SoraOSSection from '@/components/sections/home/SoraOSSection'
-import BIMTechSection from '@/components/sections/home/BIMTechSection'
-import ConstructionSection from '@/components/sections/home/ConstructionSection'
-import InnovationSection from '@/components/sections/home/InnovationSection'
-import SectorsSection from '@/components/sections/home/SectorsSection'
-import CoverageSection from '@/components/sections/home/CoverageSection'
+import BlogHero from '@/components/sections/blog/BlogHero'
+import BlogCategoryFilter from '@/components/sections/blog/BlogCategoryFilter'
+import BlogGrid from '@/components/sections/blog/BlogGrid'
+import NewsletterBanner from '@/components/sections/blog/NewsletterBanner'
 
-import esMessages from '@/messages/es.json'
-import enMessages from '@/messages/en.json'
-
-type Messages = typeof esMessages
-function getMsg(locale: string): Messages {
-  return locale === 'en' ? (enMessages as unknown as Messages) : esMessages
-}
+const ALL_CATEGORIES: BlogCategory[] = ['bim','iso-19650','cde','sistemas-especiales','data-centers','hospitales','industria','coordinacion-bim','ia-aplicada-bim','transformacion-digital']
 
 type Props = { params: Promise<{ locale: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params
-  return genMeta(getHomeMetadata(locale as Locale), locale as Locale)
+  return genMeta(getBlogMetadata(locale as Locale), locale as Locale)
 }
 
-export default async function HomePage({ params }: Props) {
+export default async function BlogIndexPage({ params }: Props) {
   const { locale } = await params
   if (!routing.locales.includes(locale as Locale)) notFound()
-
-  const m    = getMsg(locale)
-  const isEs = locale === 'es'
-  const contactHref  = isEs ? `/${locale}/contacto`  : `/${locale}/contact`
-  const servicesHref = isEs ? `/${locale}/servicios` : `/${locale}/services`
-
-  const h  = m.home
-  const sv = m.services
-  const sc = m.sectors
-
-  const heroData = {
-    label: h.hero.label, headline: h.hero.headline, subheadline: h.hero.subheadline,
-    ctaPrimary: h.hero.ctaPrimary, ctaSecondary: h.hero.ctaSecondary,
-    statement: h.hero.statement, scrollLabel: h.hero.scrollLabel,
-  }
-  const aboutData = {
-    label: h.about.label, headline: h.about.headline, body: h.about.body,
-    stats: h.about.stats as unknown as { value: number; suffix: string; label: string }[],
-    cta: h.about.cta,
-  }
-  const servicesData = {
-    label: h.services.label, headline: h.services.headline, subheadline: h.services.subheadline,
-    services: sv.items as unknown as { slug: string; icon: string; title: string; shortDescription: string; standards: string[]; cta: string }[],
-    ctaLabel: h.services.cta,
-  }
-  const methodologyData = {
-    label: h.methodology.label, headline: h.methodology.headline,
-    steps: h.methodology.steps as unknown as { number: string; title: string; description: string }[],
-    quote: h.methodology.quote, quoteAuthor: h.methodology.quoteAuthor,
-  }
-  const soraOsData = {
-    label: h.soraOs.label, title: h.soraOs.title, headline: h.soraOs.headline, body: h.soraOs.body,
-    pillars: h.soraOs.pillars as unknown as { icon: string; title: string; description: string }[],
-    cta: h.soraOs.cta,
-  }
-  const bimTechData = {
-    label: h.bimTech.label, headline: h.bimTech.headline, body: h.bimTech.body,
-    tools: h.bimTech.tools as unknown as string[], cta: h.bimTech.cta,
-  }
-  const constructionData = {
-    label: h.construction.label, headline: h.construction.headline, body: h.construction.body,
-    stats: h.construction.stats as unknown as { value: number; suffix: string; label: string }[],
-  }
-  const innovationData = {
-    label: h.innovation.label, headline: h.innovation.headline, body: h.innovation.body,
-    flow: h.innovation.flow as unknown as string[], cta: h.innovation.cta,
-  }
-  const sectorsData = {
-    label: h.sectors.label, headline: h.sectors.headline,
-    sectors: sc.items as unknown as { slug: string; icon: string; title: string; tagline: string }[],
-    cta: h.sectors.cta,
-  }
-  const coverageData = {
-    label: h.coverage.label, headline: h.coverage.headline, subheadline: h.coverage.subheadline,
-    locations: h.coverage.locations as unknown as { city: string; role: string; description: string }[],
-    alliance: h.coverage.alliance as unknown as { title: string; body: string },
-  }
-  const ctaData = { headline: h.cta.headline, body: h.cta.body, primary: h.cta.primary, secondary: h.cta.secondary }
-
+  const t       = await getTranslations('blog')
+  const tCommon = await getTranslations('common')
+  const posts         = await getAllBlogPosts(locale as Locale)
+  const categoryStats = await getBlogCategories(locale as Locale)
+  const categories = ALL_CATEGORIES
+    .filter((key) => categoryStats.some((c) => c.category === key))
+    .map((key) => ({ value: key, label: t(`categories.${key}` as any), count: categoryStats.find((c) => c.category === key)?.count ?? 0 }))
   return (
     <>
-      <SchemaOrg schema={[getOrganizationSchema(), getWebsiteSchema()]} />
+      <SchemaOrg schema={getBreadcrumbSchema([{ name: tCommon('breadcrumb.home'), url: `/${locale}/` }, { name: t('hero.label'), url: `/${locale}/blog` }])} />
       <SiteLayout>
-        <HeroSection {...heroData} />
-        <AboutSection {...aboutData} />
-        <ServicesSection {...servicesData} />
-        <MethodologySection {...methodologyData} />
-        <SoraOSSection {...soraOsData} />
-        <BIMTechSection {...bimTechData} />
-        <ConstructionSection {...constructionData} />
-        <InnovationSection {...innovationData} />
-        <SectorsSection {...sectorsData} />
-        <CoverageSection {...coverageData} />
-        <CTASection
-          headline={ctaData.headline} body={ctaData.body}
-          primaryLabel={ctaData.primary} primaryHref={contactHref}
-          secondaryLabel={ctaData.secondary} secondaryHref={servicesHref}
-          variant="light"
-        />
+        <BlogHero label={t('hero.label')} headline={t('hero.headline')} subheadline={t('hero.subheadline')} />
+        <section className="bg-neutral-50 section-py">
+          <div className="container-section">
+            {categories.length > 0 && <div className="mb-10"><BlogCategoryFilter categories={categories} activeCategory="all" allLabel={t('categories.all')} /></div>}
+            <BlogGrid posts={posts} readTimeLabel={t('readTime')} locale={locale} emptyMessage={t('noPostsFound')} featured={posts.length > 1} />
+          </div>
+        </section>
+        <NewsletterBanner headline={t('newsletter.headline')} body={t('newsletter.body')} placeholder={t('newsletter.placeholder')} cta={t('newsletter.cta')} privacy={t('newsletter.privacy')} />
       </SiteLayout>
     </>
   )
 }
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }))
-}
+export function generateStaticParams() { return routing.locales.map((locale) => ({ locale })) }

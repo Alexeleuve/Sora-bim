@@ -1,34 +1,36 @@
 // SiteLayout — Server Component
-// Uses direct JSON imports (no next-intl/server) to stay compatible with output:'export'
-import { notFound } from 'next/navigation'
-import { routing } from '@/i18n/routing'
+import { getLocale, getTranslations } from 'next-intl/server'
 import Header from '@/components/layout/Header/Header'
 import Footer from '@/components/layout/Footer/Footer'
 import FloatingCTA from '@/components/shared/FloatingCTA'
 import { cn } from '@/lib/utils'
-
-import esMessages from '@/messages/es.json'
-import enMessages from '@/messages/en.json'
+import { routing } from '@/i18n/routing'
 
 interface SiteLayoutProps {
   children:         React.ReactNode
   className?:       string
   showFloatingCTA?: boolean
-  locale?:          string  // Optional override; if absent, inferred from URL segment
+}
+
+// Derives localized contact path directly from routing.pathnames.
+// Single source of truth — if '/contacto' mapping changes in routing.ts,
+// this updates automatically.
+function getContactHref(locale: string): string {
+  const pathnames = routing.pathnames as Record<string, string | Record<string, string>>
+  const mapping   = pathnames['/contacto']
+  if (!mapping) return `/${locale}/contacto`
+  if (typeof mapping === 'string') return `/${locale}${mapping}`
+  return `/${locale}${(mapping as Record<string, string>)[locale] ?? '/contacto'}`
 }
 
 export default async function SiteLayout({
   children,
   className,
   showFloatingCTA = true,
-  locale: localeProp,
 }: SiteLayoutProps) {
-  // Locale is provided by the page (preferred) or falls back to default
-  const locale = localeProp ?? routing.defaultLocale
-  const isEs   = locale === 'es'
-  const nav    = locale === 'en' ? enMessages.nav : esMessages.nav
-
-  const contactHref = isEs ? `/${locale}/contacto` : `/${locale}/contact`
+  const locale      = await getLocale()
+  const t           = await getTranslations('nav')
+  const contactHref = getContactHref(locale)
 
   return (
     <>
@@ -42,7 +44,7 @@ export default async function SiteLayout({
       </main>
       <Footer />
       {showFloatingCTA && (
-        <FloatingCTA label={nav.cta} href={contactHref} />
+        <FloatingCTA label={t('cta')} href={contactHref} />
       )}
     </>
   )

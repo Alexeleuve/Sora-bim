@@ -1,5 +1,4 @@
 import { getRequestConfig } from 'next-intl/server'
-import type { AbstractIntlMessages } from 'next-intl'
 import { routing } from './routing'
 
 export default getRequestConfig(async ({ requestLocale }) => {
@@ -9,9 +8,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale = routing.defaultLocale
   }
 
-  const messages = (
-    await import(`../../messages/${locale}.json`)
-  ).default as unknown as AbstractIntlMessages
+  const messages = (await import(`../../messages/${locale}.json`)).default
 
   return {
     locale,

@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   // ── DEPLOYMENT ─────────────────────────────────────────────────
   // Static export for Hostinger shared hosting.
   // Change to 'standalone' for Node.js VPS/cloud deployment.
-  output: 'export',
+  output: 'standalone',
   trailingSlash: true,
 
   // ── PAGE EXTENSIONS ────────────────────────────────────────────
@@ -53,7 +53,7 @@ const nextConfig: NextConfig = {
 
   // ── HEADERS ────────────────────────────────────────────────────
   // Security + caching headers
-  // NOTE: headers() has no effect with output: 'export'
+  // NOTE: headers() has no effect with output: 'standalone'
   // Configure these in your hosting panel (Hostinger / nginx / Apache)
   async headers() {
     return [
