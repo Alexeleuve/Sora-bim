@@ -48,8 +48,11 @@ export default function Header() {
   const ctaLabel    = t('cta')
 
   const handleCtaClick = (location: string) =>
-    trackDiagnosticClick({ cta_label: ctaLabel, cta_location: location, href: contactHref })
-
+  trackDiagnosticClick({
+  cta_label: ctaLabel,
+  cta_location: location,
+  href: contactHref
+})
   return (
     <>
       {/* ── Fixed header ─────────────────────────────────────── */}
