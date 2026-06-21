@@ -12,38 +12,26 @@ const withMDX = createMDX({
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
-  // ── DEPLOYMENT ─────────────────────────────────────────────────
-  // Static export for Hostinger shared hosting.
-  // Change to 'standalone' for Node.js VPS/cloud deployment.
   output: 'standalone',
-  trailingSlash: true,
 
-  // ── PAGE EXTENSIONS ────────────────────────────────────────────
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
 
-  // ── IMAGES ─────────────────────────────────────────────────────
-  // unoptimized: true required for static export (no server-side optimization)
-  // For Node.js deployment, set unoptimized: false and add domains
   images: {
-    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
-    imageSizes:  [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
 
-  // ── COMPILER ───────────────────────────────────────────────────
   compiler: {
-    // Remove console.log in production (keep console.error/warn)
-    removeConsole: process.env.NODE_ENV === 'production'
-      ? { exclude: ['error', 'warn'] }
-      : false,
+    removeConsole:
+      process.env.NODE_ENV === 'production'
+        ? { exclude: ['error', 'warn'] }
+        : false,
   },
 
-  // ── EXPERIMENTAL ───────────────────────────────────────────────
   experimental: {
     mdxRs: true,
-    // Tree-shake large packages: only import what's used
     optimizePackageImports: [
       'lucide-react',
       'framer-motion',
@@ -51,23 +39,18 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // ── HEADERS ────────────────────────────────────────────────────
-  // Security + caching headers
-  // NOTE: headers() has no effect with output: 'standalone'
-  // Configure these in your hosting panel (Hostinger / nginx / Apache)
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options',        value: 'SAMEORIGIN' },
-          { key: 'X-XSS-Protection',       value: '1; mode=block' },
-          { key: 'Referrer-Policy',         value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy',      value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
         ],
       },
-      // Long-term caching for static assets
       {
         source: '/fonts/(.*)',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
@@ -80,7 +63,6 @@ const nextConfig: NextConfig = {
         source: '/icons/(.*)',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
-      // Sitemap + robots — short cache for freshness
       {
         source: '/sitemap.xml',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=3600' }],
@@ -92,27 +74,34 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  // ── REDIRECTS ──────────────────────────────────────────────────
-  // Redirect bare / to /es (handled by middleware, but useful as fallback)
-  async redirects() {
+  async rewrites() {
     return [
-      {
-        source: '/',
-        destination: '/es',
-        permanent: false,
-      },
+      { source: '/en/services', destination: '/en/servicios' },
+      { source: '/en/services/:slug', destination: '/en/servicios/:slug' },
+
+      { source: '/en/sectors', destination: '/en/sectores' },
+      { source: '/en/sectors/:slug', destination: '/en/sectores/:slug' },
+
+      { source: '/en/about', destination: '/en/nosotros' },
+      { source: '/en/contact', destination: '/en/contacto' },
+      { source: '/en/case-studies', destination: '/en/casos-de-exito' },
+
+      { source: '/en/blog/category/:category', destination: '/en/blog/categoria/:category' },
     ]
   },
 
-  // ── WEBPACK OPTIMIZATIONS ──────────────────────────────────────
+  async redirects() {
+    return [
+      { source: '/', destination: '/es', permanent: false },
+    ]
+  },
+
   webpack: (config, { isServer, dev }) => {
-    // Optimize SVG handling
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
 
-    // In production client builds, enable aggressive tree shaking
     if (!isServer && !dev) {
       config.optimization = {
         ...config.optimization,
@@ -125,6 +114,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withNextIntl(
-  withMDX(nextConfig)
-)
+export default withNextIntl(withMDX(nextConfig))

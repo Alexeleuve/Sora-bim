@@ -10,15 +10,108 @@ interface LanguageSwitcherProps {
   className?: string
 }
 
+// ── Section path translation (mirrors routing.ts pathnames) ───────────────────
+const ES_TO_EN: Record<string, string> = {
+  'servicios':       'services',
+  'sectores':        'sectors',
+  'nosotros':        'about',
+  'contacto':        'contact',
+  'casos-de-exito':  'case-studies',
+  'categoria':       'category',
+  // same in both locales:
+  'blog':            'blog',
+  'sora-os':         'sora-os',
+}
+const EN_TO_ES: Record<string, string> = Object.fromEntries(
+  Object.entries(ES_TO_EN).map(([k, v]) => [v, k])
+)
+
+// ── Service slug translation ──────────────────────────────────────────────────
+const SERVICE_ES_TO_EN: Record<string, string> = {
+  'integracion-bim':    'bim-integration',
+  'coordinacion-bim':   'bim-coordination',
+  'sistemas-especiales': 'special-systems',
+  'sistemas-electricos': 'electrical-systems',
+  'gestion-informacion': 'information-management',
+  'bim-4d':             'bim-4d',
+  'bim-5d':             'bim-5d',
+}
+const SERVICE_EN_TO_ES: Record<string, string> = Object.fromEntries(
+  Object.entries(SERVICE_ES_TO_EN).map(([k, v]) => [v, k])
+)
+
+// ── Sector slug translation ───────────────────────────────────────────────────
+const SECTOR_ES_TO_EN: Record<string, string> = {
+  'industrial':      'industrial',
+  'data-centers':    'data-centers',
+  'hospitales':      'hospitals',
+  'comercial':       'commercial',
+  'infraestructura': 'infrastructure',
+}
+const SECTOR_EN_TO_ES: Record<string, string> = Object.fromEntries(
+  Object.entries(SECTOR_ES_TO_EN).map(([k, v]) => [v, k])
+)
+
+/**
+ * Translates a full pathname from one locale to another.
+ *
+ * Strategy:
+ * 1. Strip the locale prefix to get the raw path segments.
+ * 2. Normalize segment[0] (section) to its ES canonical form.
+ * 3. Translate section + slug to the target locale.
+ * 4. Reassemble with the new locale prefix.
+ */
+function translatePath(
+  fullPath: string,   // e.g. '/es/servicios/integracion-bim'
+  fromLocale: string,
+  toLocale:   string,
+): string {
+  // Split and drop the locale prefix
+  const parts    = fullPath.split('/').filter(Boolean) // ['es', 'servicios', 'integracion-bim']
+  const [, ...rest] = parts // ['servicios', 'integracion-bim']
+
+  if (rest.length === 0) return `/${toLocale}`
+
+  const [section, slug, ...tail] = rest
+
+  // Step 1: resolve to ES canonical section name
+  const canonicalSection =
+    fromLocale === 'en' ? (EN_TO_ES[section] ?? section) : section
+
+  // Step 2: translate section to target locale
+  const targetSection =
+    toLocale === 'en' ? (ES_TO_EN[canonicalSection] ?? canonicalSection) : canonicalSection
+
+  // Step 3: translate slug if present
+  let targetSlug = slug
+  if (slug) {
+    if (canonicalSection === 'servicios') {
+      targetSlug =
+        fromLocale === 'es'
+          ? (SERVICE_ES_TO_EN[slug] ?? slug)
+          : (SERVICE_EN_TO_ES[slug] ?? slug)
+    } else if (canonicalSection === 'sectores') {
+      targetSlug =
+        fromLocale === 'es'
+          ? (SECTOR_ES_TO_EN[slug] ?? slug)
+          : (SECTOR_EN_TO_ES[slug] ?? slug)
+    }
+    // blog slugs are the same in both locales — no translation needed
+  }
+
+  // Reassemble
+  const segments = [toLocale, targetSection, targetSlug, ...tail].filter(Boolean)
+  return '/' + segments.join('/')
+}
+
 export default function LanguageSwitcher({ dark = false, className }: LanguageSwitcherProps) {
-  const locale = useLocale()
-  const router = useRouter()
-  const pathname = usePathname()
+  const locale   = useLocale()
+  const pathname = usePathname() // full path including locale, e.g. '/es/servicios/integracion-bim'
+  const router   = useRouter()
 
   const switchLocale = (newLocale: string) => {
     if (newLocale === locale) return
-    // Replace current locale prefix with new one
-    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`)
+    const newPath = translatePath(pathname, locale, newLocale)
     router.push(newPath)
   }
 

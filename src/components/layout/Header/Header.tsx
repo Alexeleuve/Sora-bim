@@ -10,23 +10,41 @@ import { cn } from '@/lib/utils'
 import { trackDiagnosticClick } from '@/lib/analytics'
 import LanguageSwitcher from './LanguageSwitcher'
 
-export default function Header() {
+interface HeaderProps {
+  /**
+   * When true the header starts in opaque/dark mode and stays there.
+   * Use this on pages whose first section has a light background (e.g. sectors index)
+   * so the navigation text is readable before the user scrolls.
+   */
+  lightBackground?: boolean
+}
+
+export default function Header({ lightBackground = false }: HeaderProps) {
   const t        = useTranslations('nav')
   const locale   = useLocale()
   const pathname = usePathname()
-  const [scrolled,    setScrolled]    = useState(false)
-  const [mobileOpen,  setMobileOpen]  = useState(false)
+
+  // On light-background pages start already "scrolled" (opaque header).
+  // On dark-hero pages start transparent and transition on scroll.
+  const [scrolled,   setScrolled]   = useState(lightBackground)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const isEs = locale === 'es'
 
   useEffect(() => {
+    // Light-background pages keep the header permanently opaque — no listener needed.
+    if (lightBackground) return
+
     let rafId: number
     const onScroll = () => {
       cancelAnimationFrame(rafId)
       rafId = requestAnimationFrame(() => setScrolled(window.scrollY > 80))
     }
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(rafId) }
-  }, [])
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(rafId)
+    }
+  }, [lightBackground])
 
   useEffect(() => { setMobileOpen(false) }, [pathname])
 
@@ -48,11 +66,8 @@ export default function Header() {
   const ctaLabel    = t('cta')
 
   const handleCtaClick = (location: string) =>
-  trackDiagnosticClick({
-  cta_label: ctaLabel,
-  cta_location: location,
-  href: contactHref
-})
+    trackDiagnosticClick({ cta_label: ctaLabel, cta_location: location, href: contactHref })
+
   return (
     <>
       {/* ── Fixed header ─────────────────────────────────────── */}
@@ -156,18 +171,13 @@ export default function Header() {
               aria-label="Menú móvil"
               className="fixed top-0 right-0 bottom-0 z-[101] w-full max-w-sm bg-neutral-900 flex flex-col lg:hidden animate-slide-in-right"
             >
-              {/* Drawer header */}
               <div className="flex items-center justify-between px-6 h-16 border-b border-white/[0.08]">
                 <Link
                   href={`/${locale}`}
                   onClick={() => setMobileOpen(false)}
                   aria-label="SORA | Technical BIM Integration — ir al inicio"
                 >
-                  <img
-                    src="/images/sora-logo-white.png"
-                    alt="SORA | Technical BIM Integration"
-                    className="h-12 w-auto object-contain max-w-[170px]"
-                  />
+                  <img src="/images/sora-logo-white.png" alt="SORA | Technical BIM Integration" className="h-12 w-auto object-contain max-w-[170px]" />
                 </Link>
                 <button
                   onClick={() => setMobileOpen(false)}
@@ -177,8 +187,6 @@ export default function Header() {
                   <X size={22} />
                 </button>
               </div>
-
-              {/* Drawer links */}
               <div className="flex-1 overflow-y-auto px-6 py-8">
                 <ul className="space-y-1">
                   {navLinks.map((link, i) => (
@@ -205,15 +213,10 @@ export default function Header() {
                   ))}
                 </ul>
               </div>
-
-              {/* Drawer footer */}
               <div className="px-6 pb-10 space-y-4">
                 <Link
                   href={contactHref}
-                  onClick={() => {
-                    setMobileOpen(false)
-                    handleCtaClick('header_mobile_drawer')
-                  }}
+                  onClick={() => { setMobileOpen(false); handleCtaClick('header_mobile_drawer') }}
                   className="flex items-center justify-center w-full bg-brand-500 text-white rounded-sm font-display font-semibold text-sm tracking-[0.04em] uppercase py-4 hover:bg-brand-600 transition-colors duration-200"
                 >
                   {ctaLabel}

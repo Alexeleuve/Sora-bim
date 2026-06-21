@@ -10,11 +10,16 @@ interface SiteLayoutProps {
   children:         React.ReactNode
   className?:       string
   showFloatingCTA?: boolean
+  /**
+   * Pass true on pages whose first visible section has a light/white background
+   * (e.g. sectors index, services index). This forces the header into opaque mode
+   * immediately so navigation text is readable before the user scrolls.
+   *
+   * Default: false (transparent header → dark hero pages like home, sora-os, etc.)
+   */
+  lightHeader?:     boolean
 }
 
-// Derives localized contact path directly from routing.pathnames.
-// Single source of truth — if '/contacto' mapping changes in routing.ts,
-// this updates automatically.
 function getContactHref(locale: string): string {
   const pathnames = routing.pathnames as Record<string, string | Record<string, string>>
   const mapping   = pathnames['/contacto']
@@ -27,6 +32,7 @@ export default async function SiteLayout({
   children,
   className,
   showFloatingCTA = true,
+  lightHeader     = false,
 }: SiteLayoutProps) {
   const locale      = await getLocale()
   const t           = await getTranslations('nav')
@@ -34,7 +40,7 @@ export default async function SiteLayout({
 
   return (
     <>
-      <Header />
+      <Header lightBackground={lightHeader} />
       <main
         id="main-content"
         className={cn('min-h-screen', className)}
